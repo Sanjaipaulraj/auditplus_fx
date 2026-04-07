@@ -14,7 +14,7 @@ class AutomaticMethod2Section extends StatefulWidget {
 }
 
 class _AutomaticMethod2SectionState extends State<AutomaticMethod2Section> {
-  bool isAutoClosingEnabled = false;
+  Set<String> expandedSymbols = {};
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -98,11 +98,13 @@ class _AutomaticMethod2SectionState extends State<AutomaticMethod2Section> {
                                               ),
                                               onPressed: () async {
                                                 final data = CurrentAutomationModel(
-                                                  symbol: autoLive.amSelectedValue ?? "",
-                                                  volume: autoLive.amVolume,
+                                                  // symbol: autoLive.amSelectedValue ?? "",
+                                                  symbol: autoLive.liveAutomaticTradeM2[index].symbol,
+                                                  // volume: autoLive.amVolume,
+                                                  volume: autoLive.liveAutomaticTradeM2[index].volume,
                                                   isEnabled: true,
                                                   action: ActionType.close,
-                                                  method: "AM",
+                                                  method: "AM2",
                                                 );
                                                 await automaticTrading(context, data);
                                               },
@@ -126,11 +128,13 @@ class _AutomaticMethod2SectionState extends State<AutomaticMethod2Section> {
                                               ),
                                               onPressed: () async {
                                                 final data = CurrentAutomationModel(
-                                                  symbol: autoLive.amSelectedValue ?? "",
-                                                  volume: autoLive.amVolume,
+                                                  // symbol: autoLive.amSelectedValue ?? "",
+                                                  symbol: autoLive.liveAutomaticTradeM2[index].symbol,
+                                                  // volume: autoLive.amVolume,
+                                                  volume: autoLive.liveAutomaticTradeM2[index].volume,
                                                   isEnabled: false,
                                                   action: ActionType.disable,
-                                                  method: "AM",
+                                                  method: "AM2",
                                                 );
                                                 await automaticTrading(context, data);
                                                 // autoLive.removeLiveTrade(data.symbol);
@@ -148,32 +152,22 @@ class _AutomaticMethod2SectionState extends State<AutomaticMethod2Section> {
                                                 ),
                                               ),
                                               onPressed: () {
+                                                final symbol = autoLive.liveAutomaticTradeM2[index].symbol;
+
                                                 setState(() {
-                                                  isAutoClosingEnabled = !isAutoClosingEnabled;
+                                                  if (expandedSymbols.contains(symbol)) {
+                                                    expandedSymbols.remove(symbol);
+                                                  } else {
+                                                    expandedSymbols.add(symbol);
+                                                  }
                                                 });
                                               },
-                                              // onPressed: () async {
-                                              //   final data = CurrentAutomationModel(
-                                              //     symbol: autoLive.amSelectedValue ?? "",
-                                              //     volume: autoLive.amVolume,
-                                              //     isEnabled: false,
-                                              //     action: ActionType.disable,
-                                              //     method: "AM",
-                                              //   );
-                                              //   await automaticTrading(context, data);
-                                              //   autoLive.removeLiveTrade(data.symbol);
-                                              // },
                                               icon: Icon(Icons.add, color: Color.fromRGBO(12, 9, 56, 1)),
                                             ),
                                           ],
                                         ),
-                                        if (isAutoClosingEnabled)
-                                          Column(
-                                            children: [
-                                              Text('Slot for Settings'),
-                                              AutomaticClosingSection(method: 'AM2'),
-                                            ],
-                                          ),
+                                        if (expandedSymbols.contains(autoLive.liveAutomaticTradeM2[index].symbol))
+                                          AutomaticClosingSection(method: 'AM2'),
                                       ],
                                     ),
                                   ),

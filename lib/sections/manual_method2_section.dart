@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
-import 'package:auditplus_fx/Providers/checked_box_provider.dart';
-import 'package:auditplus_fx/Providers/token_provider.dart';
+import 'package:auditplus_fx/Providers/providers.dart';
 import 'package:auditplus_fx/intent.dart';
 import 'package:auditplus_fx/sections/automatic_closing_section.dart';
 
@@ -189,37 +188,37 @@ class _ManualMethod2SectionState extends State<ManualMethod2Section> {
                   ),
                 ],
               ),
-              Consumer2<MytokenProvider, CheckedBoxProvider>(
-                builder: (context, myToken, checkedBox, child) {
+              Consumer2<ValueProvider, CheckedBoxProvider>(
+                builder: (context, value, checkedBox, child) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildCheckboxRow('long', 'LongDivergenceChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongRevChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongCatcherChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongM2MfChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongM2TrendChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongM2ReversalChecked', checkedBox),
+                      _buildCheckboxRow('long', 'LongDivergenceChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongRevChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongCatcherChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongM2MfChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongM2TrendChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongM2ReversalChecked', checkedBox, value),
                       // _buildCheckboxRow('long', 'LongOscChecked', checkedBox),
                     ],
                   );
                 },
               ),
-              Consumer2<MytokenProvider, CheckedBoxProvider>(
-                builder: (context, myToken, checkedBox, child) {
+              Consumer2<ValueProvider, CheckedBoxProvider>(
+                builder: (context, value, checkedBox, child) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildCheckboxRow('short', 'ShortDivergenceChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortRevChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortCatcherChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortM2MfChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortM2TrendChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortM2ReversalChecked', checkedBox),
+                      _buildCheckboxRow('short', 'ShortDivergenceChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortRevChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortCatcherChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortM2MfChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortM2TrendChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortM2ReversalChecked', checkedBox, value),
                       // _buildCheckboxRow('short', 'ShortOscChecked', checkedBox),
                     ],
                   );
@@ -233,7 +232,7 @@ class _ManualMethod2SectionState extends State<ManualMethod2Section> {
     );
   }
 
-  Widget _buildCheckboxRow(String method, String checkboxField, CheckedBoxProvider checkedBox) {
+  Widget _buildCheckboxRow(String method, String checkboxField, CheckedBoxProvider checkedBox, ValueProvider value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -246,7 +245,8 @@ class _ManualMethod2SectionState extends State<ManualMethod2Section> {
           onChanged: (bool? newValue) {
             setState(() {
               // checkedBox.changeValue('MM2', checkboxField, context);
-              checkedBox.changeValue(null, 'MM', checkboxField, context);
+              // checkedBox.changeValue(null, 'MM', checkboxField, context);
+              checkedBox.changeValue(value.manualSelectedValue!, 'MM', checkboxField, context);
             });
           },
           activeColor: method == 'long' ? Colors.green : Colors.red,

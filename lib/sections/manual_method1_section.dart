@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
-import 'package:auditplus_fx/Providers/checked_box_provider.dart';
-import 'package:auditplus_fx/Providers/token_provider.dart';
+import 'package:auditplus_fx/Providers/providers.dart';
 import 'package:auditplus_fx/intent.dart';
 import 'package:auditplus_fx/sections/automatic_closing_section.dart';
 
@@ -191,39 +190,39 @@ class _ManualMethod1SectionState extends State<ManualMethod1Section> {
                   ),
                 ],
               ),
-              Consumer2<MytokenProvider, CheckedBoxProvider>(
-                builder: (context, myToken, checkedBox, child) {
+              Consumer2<ValueProvider, CheckedBoxProvider>(
+                builder: (context, value, checkedBox, child) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildCheckboxRow('long', 'LongTcChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongTtChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongNeoChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongConfChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongM1MfChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongM1TrendChecked', checkedBox),
-                      _buildCheckboxRow('long', 'LongM1ReversalChecked', checkedBox),
+                      _buildCheckboxRow('long', 'LongTcChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongTtChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongNeoChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongConfChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongM1MfChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongM1TrendChecked', checkedBox, value),
+                      _buildCheckboxRow('long', 'LongM1ReversalChecked', checkedBox, value),
                       // _buildCheckboxRow('long', 'LongHwoChecked', checkedBox),
                     ],
                   );
                 },
               ),
-              Consumer2<MytokenProvider, CheckedBoxProvider>(
-                builder: (context, myToken, checkedBox, child) {
+              Consumer2<ValueProvider, CheckedBoxProvider>(
+                builder: (context, value, checkedBox, child) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildCheckboxRow('short', 'ShortTcChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortTtChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortNeoChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortConfChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortM1MfChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortM1TrendChecked', checkedBox),
-                      _buildCheckboxRow('short', 'ShortM1ReversalChecked', checkedBox),
+                      _buildCheckboxRow('short', 'ShortTcChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortTtChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortNeoChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortConfChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortM1MfChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortM1TrendChecked', checkedBox, value),
+                      _buildCheckboxRow('short', 'ShortM1ReversalChecked', checkedBox, value),
                       // _buildCheckboxRow('short', 'ShortHwoChecked', checkedBox),
                     ],
                   );
@@ -237,7 +236,7 @@ class _ManualMethod1SectionState extends State<ManualMethod1Section> {
     );
   }
 
-  Widget _buildCheckboxRow(String method, String checkboxField, CheckedBoxProvider checkedBox) {
+  Widget _buildCheckboxRow(String method, String checkboxField, CheckedBoxProvider checkedBox, ValueProvider value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -250,7 +249,8 @@ class _ManualMethod1SectionState extends State<ManualMethod1Section> {
           onChanged: (bool? newValue) {
             setState(() {
               // checkedBox.changeValue('MM1', checkboxField, context);
-              checkedBox.changeValue(null, 'MM', checkboxField, context);
+              // checkedBox.changeValue(null, 'MM', checkboxField, context);
+              checkedBox.changeValue(value.manualSelectedValue!, 'MM', checkboxField, context);
             });
           },
           activeColor: method == 'long' ? Colors.green : Colors.red,

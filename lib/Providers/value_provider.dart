@@ -32,7 +32,6 @@ class ValueProvider extends ChangeNotifier {
   CurrentAutomationModel? lastAMOpen;
   bool get isLoading => _isLoading;
 
-  //New
   List<LiveAutomaticTradeModel> liveAutomaticTradeM1 = [];
   List<LiveAutomaticTradeModel> liveAutomaticTradeM2 = [];
 
@@ -66,7 +65,6 @@ class ValueProvider extends ChangeNotifier {
       manualSelectedValue = lastSymbol;
       manualSelectedItem = SearchFieldListItem<String>(lastSymbol, item: lastSymbol);
 
-      // 🔥 IMPORTANT: Load checkbox state AFTER symbol is set
       Future.microtask(() {
         if (!context.mounted) return;
 
@@ -86,9 +84,9 @@ class ValueProvider extends ChangeNotifier {
 
         final checkboxProvider = Provider.of<CheckedBoxProvider>(context, listen: false);
 
-        checkboxProvider.loadFromApi(lastSymbol, 'MM');
-        checkboxProvider.loadFromApi(lastSymbol, 'AM1');
-        checkboxProvider.loadFromApi(lastSymbol, 'AM2');
+        checkboxProvider.loadFromApi(amLastSymbol, 'MM');
+        checkboxProvider.loadFromApi(amLastSymbol, 'AM1');
+        checkboxProvider.loadFromApi(amLastSymbol, 'AM2');
       });
     }
 
@@ -120,7 +118,6 @@ class ValueProvider extends ChangeNotifier {
   }
 
   void setAMVolume(String method, double newVolume) async {
-    // if (method == 'AM1') {
     amVolume = newVolume;
     amVolumeController.text = newVolume.toString();
 
@@ -135,11 +132,6 @@ class ValueProvider extends ChangeNotifier {
     );
     await setLocalValues(data);
     notifyListeners();
-    // } else {
-    // am2Volume = newVolume;
-    // am2VolumeController.text = newVolume.toString();
-    // notifyListeners();
-    // }
   }
 
   void clearSelectedValue() {
@@ -237,9 +229,9 @@ class ValueProvider extends ChangeNotifier {
   }
 
   void removeLiveTrade(String symbol, String method) {
-    if (method == 'am1') {
+    if (method == 'AM1') {
       liveAutomaticTradeM1.removeWhere((el) => el.symbol == symbol);
-    } else if (method == 'am2') {
+    } else if (method == 'AM2') {
       liveAutomaticTradeM2.removeWhere((el) => el.symbol == symbol);
     }
     notifyListeners();
