@@ -451,7 +451,7 @@ class HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Consumer<ValueProvider>(
-                                builder: (context, seg, child) {
+                                builder: (context, mm, child) {
                                   return Container(
                                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                                     decoration: BoxDecoration(
@@ -464,12 +464,12 @@ class HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Expanded(
                                           child: GestureDetector(
-                                            onTap: () => seg.changeMethodScreen(Method.method1),
+                                            onTap: () => mm.changeMethodScreen('MM', Method.method1),
                                             child: AnimatedContainer(
                                               duration: const Duration(milliseconds: 200),
                                               padding: const EdgeInsets.symmetric(vertical: 12),
                                               decoration: BoxDecoration(
-                                                color: seg.screenView == Method.method1
+                                                color: mm.manualScreenView == Method.method1
                                                     ? const Color.fromRGBO(33, 52, 72, 1)
                                                     // : Colors.transparent,
                                                     : Color.fromRGBO(209, 238, 250, 1),
@@ -480,7 +480,7 @@ class HomeScreenState extends State<HomeScreen> {
                                                   "Method1",
                                                   style: TextStyle(
                                                     fontSize: 16,
-                                                    color: seg.screenView == Method.method1
+                                                    color: mm.manualScreenView == Method.method1
                                                         // ? Colors.white
                                                         ? Colors.white
                                                         : Colors.black,
@@ -493,12 +493,12 @@ class HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Expanded(
                                           child: GestureDetector(
-                                            onTap: () => seg.changeMethodScreen(Method.method2),
+                                            onTap: () => mm.changeMethodScreen('MM', Method.method2),
                                             child: AnimatedContainer(
                                               duration: const Duration(milliseconds: 200),
                                               padding: const EdgeInsets.symmetric(vertical: 12),
                                               decoration: BoxDecoration(
-                                                color: seg.screenView == Method.method2
+                                                color: mm.manualScreenView == Method.method2
                                                     ? const Color.fromRGBO(33, 52, 72, 1)
                                                     // : Colors.transparent,
                                                     : Color.fromRGBO(209, 238, 250, 1),
@@ -509,7 +509,7 @@ class HomeScreenState extends State<HomeScreen> {
                                                   "Method2",
                                                   style: TextStyle(
                                                     fontSize: 16,
-                                                    color: seg.screenView == Method.method2
+                                                    color: mm.manualScreenView == Method.method2
                                                         ? Colors.white
                                                         : Colors.black,
                                                     fontWeight: FontWeight.w600,
@@ -526,7 +526,7 @@ class HomeScreenState extends State<HomeScreen> {
                               ),
                               Consumer<ValueProvider>(
                                 builder: (context, screen, child) {
-                                  return screen.screenView == Method.method1
+                                  return screen.manualScreenView == Method.method1
                                       ? ManualMethod1Section()
                                       : ManualMethod2Section();
                                 },

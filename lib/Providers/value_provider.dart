@@ -13,7 +13,8 @@ enum Method { method1, method2 }
 
 class ValueProvider extends ChangeNotifier {
   //Screen Changes
-  Method screenView = Method.method1;
+  Method manualScreenView = Method.method1;
+  Method autoScreenView = Method.method1;
 
   String? manualSelectedValue;
   String? amSelectedValue;
@@ -32,7 +33,8 @@ class ValueProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   //New
-  List<LiveAutomaticTradeModel> liveAutomaticTrade = [];
+  List<LiveAutomaticTradeModel> liveAutomaticTradeM1 = [];
+  List<LiveAutomaticTradeModel> liveAutomaticTradeM2 = [];
 
   ValueProvider(BuildContext context) {
     _loadInitial(context);
@@ -52,7 +54,14 @@ class ValueProvider extends ChangeNotifier {
     amVolumeController.text = amVolume.toString();
     final lastSymbol = response.lastActiveSymbol;
     final amLastSymbol = response.amLastSymbol;
-    liveAutomaticTrade = response.liveAutomaticTrade;
+    var liveAmData = response.liveAutomaticTrade;
+    for (var item in liveAmData) {
+      if (item.method == 'AM1') {
+        liveAutomaticTradeM1.add(item);
+      } else if (item.method == 'AM2') {
+        liveAutomaticTradeM2.add(item);
+      }
+    }
     if (lastSymbol.isNotEmpty) {
       manualSelectedValue = lastSymbol;
       manualSelectedItem = SearchFieldListItem<String>(lastSymbol, item: lastSymbol);
@@ -103,7 +112,8 @@ class ValueProvider extends ChangeNotifier {
       amLastSymbol: amSelectedValue ?? "",
       automaticVolume: amVolume,
       manualVolume: manualVolume,
-      liveAutomaticTrade: liveAutomaticTrade,
+      // liveAutomaticTrade: liveAutomaticTrade,
+      liveAutomaticTrade: [...liveAutomaticTradeM1, ...liveAutomaticTradeM2],
     );
     await setLocalValues(data);
     notifyListeners();
@@ -120,7 +130,8 @@ class ValueProvider extends ChangeNotifier {
       amLastSymbol: amSelectedValue ?? "",
       automaticVolume: amVolume,
       manualVolume: manualVolume,
-      liveAutomaticTrade: liveAutomaticTrade,
+      // liveAutomaticTrade: liveAutomaticTrade,
+      liveAutomaticTrade: [...liveAutomaticTradeM1, ...liveAutomaticTradeM2],
     );
     await setLocalValues(data);
     notifyListeners();
@@ -144,8 +155,12 @@ class ValueProvider extends ChangeNotifier {
   }
 
   //Change Screen
-  void changeMethodScreen(Method selection) {
-    screenView = selection;
+  void changeMethodScreen(String screen, Method selection) {
+    if (screen == 'MM') {
+      manualScreenView = selection;
+    } else if (screen == 'AM') {
+      autoScreenView = selection;
+    }
     notifyListeners();
   }
 
@@ -159,7 +174,8 @@ class ValueProvider extends ChangeNotifier {
       amLastSymbol: amSelectedValue ?? "",
       automaticVolume: amVolume,
       manualVolume: manualVolume,
-      liveAutomaticTrade: liveAutomaticTrade,
+      // liveAutomaticTrade: liveAutomaticTrade,
+      liveAutomaticTrade: [...liveAutomaticTradeM1, ...liveAutomaticTradeM2],
     );
     await setLocalValues(data);
     notifyListeners();
@@ -175,7 +191,8 @@ class ValueProvider extends ChangeNotifier {
       amLastSymbol: amSelectedValue ?? "",
       automaticVolume: amVolume,
       manualVolume: manualVolume,
-      liveAutomaticTrade: liveAutomaticTrade,
+      // liveAutomaticTrade: liveAutomaticTrade,
+      liveAutomaticTrade: [...liveAutomaticTradeM1, ...liveAutomaticTradeM2],
     );
     await setLocalValues(data);
 
@@ -219,13 +236,22 @@ class ValueProvider extends ChangeNotifier {
     }
   }
 
-  void removeLiveTrade(String symbol) {
-    liveAutomaticTrade.removeWhere((el) => el.symbol == symbol);
+  void removeLiveTrade(String symbol, String method) {
+    if (method == 'am1') {
+      liveAutomaticTradeM1.removeWhere((el) => el.symbol == symbol);
+    } else if (method == 'am2') {
+      liveAutomaticTradeM2.removeWhere((el) => el.symbol == symbol);
+    }
     notifyListeners();
   }
 
   void addLiveTrade(CurrentAutomationModel mod) {
-    liveAutomaticTrade.add(LiveAutomaticTradeModel(symbol: mod.symbol, volume: mod.volume));
+    print(mod);
+    if (mod.method == 'AM1') {
+      liveAutomaticTradeM1.add(LiveAutomaticTradeModel(method: mod.method, symbol: mod.symbol, volume: mod.volume));
+    } else if (mod.method == 'AM2') {
+      liveAutomaticTradeM2.add(LiveAutomaticTradeModel(method: mod.method, symbol: mod.symbol, volume: mod.volume));
+    }
     notifyListeners();
   }
 }

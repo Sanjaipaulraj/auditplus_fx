@@ -1,3 +1,4 @@
+import 'package:auditplus_fx/sections/automatic_method1_section.dart';
 import 'package:auditplus_fx/sections/sections.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,6 @@ class AutomationScreen extends StatefulWidget {
 }
 
 class _AutomationScreenState extends State<AutomationScreen> {
-  bool isAutoClosingEnabled = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,17 +26,77 @@ class _AutomationScreenState extends State<AutomationScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 5, bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Method 1",
-                    style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+            Consumer<ValueProvider>(
+              builder: (context, am, child) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  decoration: BoxDecoration(
+                    // color: Colors.grey.shade200,
+                    color: Color.fromRGBO(209, 238, 250, 1),
+                    border: Border.all(color: Colors.black, width: 1.0),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
-              ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => am.changeMethodScreen('AM', Method.method1),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: am.autoScreenView == Method.method1
+                                  ? const Color.fromRGBO(33, 52, 72, 1)
+                                  // : Colors.transparent,
+                                  : Color.fromRGBO(209, 238, 250, 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Method1",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: am.autoScreenView == Method.method1
+                                      // ? Colors.white
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => am.changeMethodScreen('AM', Method.method2),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: am.autoScreenView == Method.method2
+                                  ? const Color.fromRGBO(33, 52, 72, 1)
+                                  // : Colors.transparent,
+                                  : Color.fromRGBO(209, 238, 250, 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Method2",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: am.autoScreenView == Method.method2 ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 5, bottom: 5),
@@ -85,7 +145,6 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     return List<SearchFieldListItem<String>>.from(widget.symbols);
                                   }
                                   context.read<ValueProvider>().amClearSelectedValue();
-                                  // context.read<CheckedBoxProvider>().clearState();
 
                                   final query = searchText.toUpperCase();
                                   return widget.symbols.where((s) {
@@ -121,14 +180,12 @@ class _AutomationScreenState extends State<AutomationScreen> {
                               height: 35,
                               width: 100,
                               child: TextFormField(
-                                // controller: drop.am1VolumeController,
                                 controller: drop.amVolumeController,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 onChanged: (newValue) {
                                   final parsedValue = double.tryParse(newValue);
                                   if (parsedValue != null) {
-                                    // drop.setAMVolume('AM1', parsedValue);
                                     drop.setAMVolume('AM', parsedValue);
                                   }
                                 },
@@ -171,7 +228,6 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             return TextButton(
                               style: ElevatedButton.styleFrom(
                                 maximumSize: Size(75, 40),
-                                // backgroundColor: Color.fromRGBO(44, 187, 104, 1),
                                 backgroundColor: Color.fromRGBO(2, 172, 58, 1),
                                 foregroundColor: Colors.black,
                                 shape: RoundedRectangleBorder(
@@ -179,17 +235,15 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                              // onPressed: () => Provider.of<CheckedBoxProvider>(
-                              //   context,
-                              //   listen: false,
-                              // ).changeValue('Add', 'AM1', 'AM1Checked', context),
                               onPressed: () async {
+                                String method = autoLive.autoScreenView == Method.method1 ? 'AM1' : 'AM2';
                                 final data = CurrentAutomationModel(
                                   symbol: autoLive.amSelectedValue ?? "",
                                   volume: autoLive.amVolume,
                                   isEnabled: true,
                                   action: ActionType.add,
-                                  method: "AM",
+                                  // method: "AM",
+                                  method: method,
                                 );
                                 await automaticTrading(context, data);
                                 autoLive.addLiveTrade(data);
@@ -204,184 +258,10 @@ class _AutomationScreenState extends State<AutomationScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 5, bottom: 5),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Consumer<ValueProvider>(
-                    builder: (context, autoLive, child) {
-                      if (autoLive.liveAutomaticTrade.isEmpty) {
-                        return Text("No items found");
-                      } else {
-                        return SingleChildScrollView(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black),
-                            ),
-                            height: MediaQuery.of(context).size.height * 0.7,
-                            width: MediaQuery.of(context).size.height * 0.7,
-                            child: Consumer<ValueProvider>(
-                              builder: (context, autoLive, child) {
-                                return ListView.builder(
-                                  itemCount: autoLive.liveAutomaticTrade.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.only(
-                                              left: 12.0,
-                                              right: 12.0,
-                                              top: 5.0,
-                                              bottom: 5.0,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(255, 255, 255, 255),
-                                              borderRadius: BorderRadius.circular(15),
-                                              border: BoxBorder.all(color: Colors.black),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 110,
-                                                      height: 35,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(top: 3.0),
-                                                        child: Text(
-                                                          autoLive.liveAutomaticTrade[index].symbol,
-                                                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 65,
-                                                      height: 35,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(top: 3.0),
-                                                        child: Text(
-                                                          autoLive.liveAutomaticTrade[index].volume.toString(),
-                                                          style: TextStyle(
-                                                            color: Color.fromRGBO(37, 99, 235, 1),
-                                                            fontSize: 18,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    TextButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        maximumSize: Size(75, 40),
-                                                        backgroundColor: Color.fromRGBO(229, 231, 235, 1),
-                                                        foregroundColor: Colors.black,
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadiusGeometry.circular(5),
-                                                          side: BorderSide(color: Colors.black, width: 1),
-                                                        ),
-                                                      ),
-                                                      onPressed: () async {
-                                                        final data = CurrentAutomationModel(
-                                                          symbol: autoLive.amSelectedValue ?? "",
-                                                          volume: autoLive.amVolume,
-                                                          isEnabled: true,
-                                                          action: ActionType.close,
-                                                          method: "AM",
-                                                        );
-                                                        await automaticTrading(context, data);
-                                                      },
-                                                      child: Text(
-                                                        'Close',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        maximumSize: Size(45, 40),
-                                                        backgroundColor: Color.fromRGBO(254, 226, 226, 1),
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadiusGeometry.circular(5),
-                                                          side: BorderSide(color: Colors.black, width: 1),
-                                                        ),
-                                                      ),
-                                                      onPressed: () async {
-                                                        final data = CurrentAutomationModel(
-                                                          symbol: autoLive.amSelectedValue ?? "",
-                                                          volume: autoLive.amVolume,
-                                                          isEnabled: false,
-                                                          action: ActionType.disable,
-                                                          method: "AM",
-                                                        );
-                                                        await automaticTrading(context, data);
-                                                        autoLive.removeLiveTrade(data.symbol);
-                                                      },
-                                                      icon: Icon(Icons.close, color: Color.fromRGBO(239, 68, 68, 1)),
-                                                    ),
-                                                    IconButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        maximumSize: Size(45, 40),
-                                                        backgroundColor: Color.fromRGBO(50, 187, 221, 1),
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadiusGeometry.circular(5),
-                                                          side: BorderSide(color: Colors.black, width: 1),
-                                                        ),
-                                                      ),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          isAutoClosingEnabled = !isAutoClosingEnabled;
-                                                        });
-                                                      },
-                                                      // onPressed: () async {
-                                                      //   final data = CurrentAutomationModel(
-                                                      //     symbol: autoLive.amSelectedValue ?? "",
-                                                      //     volume: autoLive.amVolume,
-                                                      //     isEnabled: false,
-                                                      //     action: ActionType.disable,
-                                                      //     method: "AM",
-                                                      //   );
-                                                      //   await automaticTrading(context, data);
-                                                      //   autoLive.removeLiveTrade(data.symbol);
-                                                      // },
-                                                      icon: Icon(Icons.add, color: Color.fromRGBO(12, 9, 56, 1)),
-                                                    ),
-                                                  ],
-                                                ),
-                                                if (isAutoClosingEnabled)
-                                                  Column(
-                                                    children: [
-                                                      Text('Slot for Settings'),
-                                                      AutomaticClosingSection(method: 'AM1'),
-                                                    ],
-                                                  ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
+            Consumer<ValueProvider>(
+              builder: (context, screen, child) {
+                return screen.autoScreenView == Method.method1 ? AutomaticMethod1Section() : AutomaticMethod2Section();
+              },
             ),
           ],
         ),
