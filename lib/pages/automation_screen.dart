@@ -1,4 +1,3 @@
-import 'package:auditplus_fx/sections/automatic_method1_section.dart';
 import 'package:auditplus_fx/sections/sections.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,13 @@ class AutomationScreen extends StatefulWidget {
 }
 
 class _AutomationScreenState extends State<AutomationScreen> {
+  late PageController _pageController;
+  @override
+  void initState() {
+    _pageController = PageController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +46,14 @@ class _AutomationScreenState extends State<AutomationScreen> {
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => am.changeMethodScreen('AM', Method.method1),
+                          onTap: () => {
+                            am.changeMethodScreen('AM', Method.method1),
+                            _pageController.animateToPage(
+                              0,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            ),
+                          },
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -69,7 +82,14 @@ class _AutomationScreenState extends State<AutomationScreen> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => am.changeMethodScreen('AM', Method.method2),
+                          onTap: () => {
+                            am.changeMethodScreen('AM', Method.method2),
+                            _pageController.animateToPage(
+                              1,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            ),
+                          },
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -242,7 +262,6 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                   volume: autoLive.amVolume,
                                   isEnabled: true,
                                   action: ActionType.add,
-                                  // method: "AM",
                                   method: method,
                                 );
                                 await automaticTrading(context, data);
@@ -258,19 +277,21 @@ class _AutomationScreenState extends State<AutomationScreen> {
                 ],
               ),
             ),
-            Consumer<ValueProvider>(
-              builder: (context, screen, child) {
-                return PageView(
-                  // Link this to your provider's state to jump between sections
-                  controller: PageController(initialPage: screen.autoScreenView == Method.method1 ? 0 : 1),
-                  onPageChanged: (index) {
-                    final method = index == 0 ? Method.method1 : Method.method2;
-                    screen.changeMethodScreen('AM', method);
-                  },
-                  physics: const BouncingScrollPhysics(), // Optional: for a nice bounce effect
-                  children: [AutomaticMethod1Section(), AutomaticMethod2Section()],
-                );
-              },
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Consumer<ValueProvider>(
+                builder: (context, screen, child) {
+                  return PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      final method = index == 0 ? Method.method1 : Method.method2;
+                      screen.changeMethodScreen('AM', method);
+                    },
+                    physics: const BouncingScrollPhysics(),
+                    children: [AutomaticMethod1Section(), AutomaticMethod2Section()],
+                  );
+                },
+              ),
             ),
           ],
         ),

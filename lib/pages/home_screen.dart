@@ -29,6 +29,7 @@ class HomeScreenState extends State<HomeScreen> {
   List<SearchFieldListItem<String>> symbols = [];
   bool isLoading = true;
   // late Future _initFuture;
+  late PageController _pageController;
 
   late TextEditingController _tokenController;
   late FocusNode _symbolFocusNode;
@@ -40,7 +41,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    _pageController = PageController();
     _symbolFocusNode = FocusNode();
     _tokenController = TextEditingController();
 
@@ -453,7 +454,6 @@ class HomeScreenState extends State<HomeScreen> {
                                   return Container(
                                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                                     decoration: BoxDecoration(
-                                      // color: Colors.grey.shade200,
                                       color: Color.fromRGBO(209, 238, 250, 1),
                                       border: Border.all(color: Colors.black, width: 1.0),
                                       borderRadius: BorderRadius.circular(8),
@@ -462,7 +462,14 @@ class HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Expanded(
                                           child: GestureDetector(
-                                            onTap: () => mm.changeMethodScreen('MM', Method.method1),
+                                            onTap: () => {
+                                              mm.changeMethodScreen('MM', Method.method1),
+                                              _pageController.animateToPage(
+                                                0,
+                                                duration: Duration(milliseconds: 300),
+                                                curve: Curves.easeInOut,
+                                              ),
+                                            },
                                             child: AnimatedContainer(
                                               duration: const Duration(milliseconds: 200),
                                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -479,7 +486,6 @@ class HomeScreenState extends State<HomeScreen> {
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     color: mm.manualScreenView == Method.method1
-                                                        // ? Colors.white
                                                         ? Colors.white
                                                         : Colors.black,
                                                     fontWeight: FontWeight.w600,
@@ -491,14 +497,20 @@ class HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Expanded(
                                           child: GestureDetector(
-                                            onTap: () => mm.changeMethodScreen('MM', Method.method2),
+                                            onTap: () => {
+                                              mm.changeMethodScreen('MM', Method.method2),
+                                              _pageController.animateToPage(
+                                                1,
+                                                duration: Duration(milliseconds: 300),
+                                                curve: Curves.easeInOut,
+                                              ),
+                                            },
                                             child: AnimatedContainer(
                                               duration: const Duration(milliseconds: 200),
                                               padding: const EdgeInsets.symmetric(vertical: 12),
                                               decoration: BoxDecoration(
                                                 color: mm.manualScreenView == Method.method2
                                                     ? const Color.fromRGBO(33, 52, 72, 1)
-                                                    // : Colors.transparent,
                                                     : Color.fromRGBO(209, 238, 250, 1),
                                                 borderRadius: BorderRadius.circular(8),
                                               ),
@@ -522,21 +534,21 @@ class HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                               ),
-                              Consumer<ValueProvider>(
-                                builder: (context, screen, child) {
-                                  return PageView(
-                                    // Link this to your provider's state to jump between sections
-                                    controller: PageController(
-                                      initialPage: screen.manualScreenView == Method.method1 ? 0 : 1,
-                                    ),
-                                    onPageChanged: (index) {
-                                      final method = index == 0 ? Method.method1 : Method.method2;
-                                      screen.changeMethodScreen('MM', method);
-                                    },
-                                    physics: const BouncingScrollPhysics(), // Optional: for a nice bounce effect
-                                    children: [ManualMethod1Section(), ManualMethod2Section()],
-                                  );
-                                },
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.8,
+                                child: Consumer<ValueProvider>(
+                                  builder: (context, screen, child) {
+                                    return PageView(
+                                      controller: _pageController,
+                                      onPageChanged: (index) {
+                                        final method = index == 0 ? Method.method1 : Method.method2;
+                                        screen.changeMethodScreen('MM', method);
+                                      },
+                                      physics: const BouncingScrollPhysics(),
+                                      children: [ManualMethod1Section(), ManualMethod2Section()],
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                           ),
