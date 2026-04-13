@@ -40,17 +40,18 @@ class _AutomaticMethod2SectionState extends State<AutomaticMethod2Section> {
                       builder: (context, autoLive, child) {
                         final items = autoLive.liveAutomaticTradeM1.values.toList();
                         return ListView.builder(
-                          itemCount: autoLive.liveAutomaticTradeM2.length,
+                          itemCount: items.length,
                           itemBuilder: (context, index) {
                             final symbol = items[index].symbol;
 
                             if (!context.read<CheckedBoxProvider>().am2ValuesPerSymbol.containsKey(symbol)) {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (!mounted) return;
+                              Future.microtask(() {
+                                // ignore: use_build_context_synchronously
                                 context.read<CheckedBoxProvider>().loadFromApi(symbol, 'AM2');
                               });
                             }
                             return Padding(
+                              key: ValueKey(items[index].symbol),
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,

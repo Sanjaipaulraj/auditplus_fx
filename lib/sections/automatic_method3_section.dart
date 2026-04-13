@@ -36,11 +36,12 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                     width: MediaQuery.of(context).size.height * 0.7,
                     child: Consumer<ValueProvider>(
                       builder: (context, autoLive, child) {
+                        final items = autoLive.liveAutomaticTradeM3.values.toList();
                         return ListView.builder(
-                          itemCount: autoLive.liveAutomaticTradeM3.length,
+                          itemCount: items.length,
                           itemBuilder: (context, index) {
-                            final items = autoLive.liveAutomaticTradeM1.values.toList();
                             return Padding(
+                              key: ValueKey(items[index].symbol),
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -65,7 +66,6 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                                               child: Padding(
                                                 padding: const EdgeInsets.only(top: 3.0),
                                                 child: Text(
-                                                  // autoLive.liveAutomaticTradeM3[index].symbol,
                                                   items[index].symbol,
                                                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                                                 ),
@@ -98,11 +98,7 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                                               ),
                                               onPressed: () async {
                                                 final data = CurrentAutomationModel(
-                                                  // symbol: autoLive.amSelectedValue ?? "",
-                                                  // symbol: autoLive.liveAutomaticTradeM3[index].symbol,
                                                   symbol: items[index].symbol,
-                                                  // volume: autoLive.amVolume,
-                                                  // volume: autoLive.liveAutomaticTradeM3[index].volume,
                                                   volume: items[index].volume,
                                                   isEnabled: true,
                                                   action: ActionType.close,
@@ -130,18 +126,13 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                                               ),
                                               onPressed: () async {
                                                 final data = CurrentAutomationModel(
-                                                  // symbol: autoLive.amSelectedValue ?? "",
-                                                  // symbol: autoLive.liveAutomaticTradeM3[index].symbol,
                                                   symbol: items[index].symbol,
-                                                  // volume: autoLive.amVolume,
-                                                  // volume: autoLive.liveAutomaticTradeM3[index].volume,
                                                   volume: items[index].volume,
                                                   isEnabled: false,
                                                   action: ActionType.disable,
                                                   method: "AM3",
                                                 );
                                                 await automaticTrading(context, data);
-                                                // autoLive.removeLiveTrade(data.symbol);
                                                 autoLive.removeLiveTrade(data.symbol, data.method);
                                               },
                                               icon: Icon(Icons.close, color: Color.fromRGBO(239, 68, 68, 1)),
