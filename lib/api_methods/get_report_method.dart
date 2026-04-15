@@ -24,8 +24,10 @@ Future<void> getReport(BuildContext context, String symbol, String startDate, St
   }
   final dio = Dio();
   final data = GetReportModel(symbol: symbol, startDate: startDate, endDate: endDate);
+  print(data);
   try {
     final response = await dio.post('$url/report', data: jsonEncode(data));
+    print(response);
     final List<DbReportModel> reportList = (response.data as List).map((e) => DbReportModel.fromJson(e)).toList();
 
     await createExcelFile(reportList);

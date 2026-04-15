@@ -1,7 +1,7 @@
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'package:file_saver/file_saver.dart';
 import 'package:excel/excel.dart';
-import 'package:file_picker/file_picker.dart';
 
 import 'models/models.dart';
 
@@ -29,33 +29,25 @@ Future<void> createExcelFile(List<DbReportModel> reports) async {
     }
   }
   try {
-    // var directory = await getProjectDirectory();
-    var directory = await pickSaveDirectory();
-    String filePath = '$directory/my_data.xlsx';
-    File file = File(filePath);
     List<int>? fileBytes = excel.encode();
+    // if (fileBytes != null) {
+    //   await file.writeAsBytes(fileBytes);
+    //   print("Saved at: ${file.path}");
+    // }
     if (fileBytes != null) {
-      await file.writeAsBytes(fileBytes);
-      print('Excel file saved to: $filePath');
+      await FileSaver.instance.saveFile(
+        name: "my_data",
+        bytes: Uint8List.fromList(fileBytes),
+        fileExtension: "xlsx",
+        // ext: "xlsx"
+      );
+      print("File Saved Succesfully");
     }
   } catch (e) {
     print('Error saving file: $e');
-    // Implement permission handling or a proper file picker here
   }
 }
 
 Future<Directory> getProjectDirectory() async {
   return Directory(Directory.current.path); // current Project folder path
-}
-
-Future<String> pickSaveDirectory() async {
-  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-  if (selectedDirectory != null) {
-    print("Selected directory: $selectedDirectory");
-    return selectedDirectory;
-  } else {
-    print("User canceled directory selection.");
-    var directory = await getProjectDirectory();
-    return directory.path;
-  }
 }

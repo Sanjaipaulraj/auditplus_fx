@@ -91,6 +91,7 @@ Future<void> openPosition(String method, String actionType, num? takeProfit, Bui
     method: method,
     volume: volume,
     takeProfit: takeProfit,
+    info: method,
     reversalPlusPlus: reversalPlusPlus,
     reversalPlus: reversalPlus,
     reversal: reversal,
