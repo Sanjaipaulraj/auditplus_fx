@@ -20,6 +20,7 @@ DbReportModel _$DbReportModelFromJson(Map<String, dynamic> json) =>
       closePrice: json['closePrice'] as num,
       profit: json['profit'] as num,
       actionType: json['actionType'] as String,
+      info: json['info'] as String,
       volume: json['volume'] as num,
       positionId: json['positionId'] as String,
       status: json['status'] as String,
@@ -38,6 +39,7 @@ Map<String, dynamic> _$DbReportModelToJson(DbReportModel instance) =>
       'actionType': instance.actionType,
       'volume': instance.volume,
       'positionId': instance.positionId,
+      'info': instance.info,
       'status': instance.status,
       'description': instance.description,
     };
