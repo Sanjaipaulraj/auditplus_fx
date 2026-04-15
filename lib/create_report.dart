@@ -1,7 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:file_saver/file_saver.dart';
+// import 'dart:typed_data';
+
 import 'package:excel/excel.dart';
+// import 'package:file_saver/file_saver.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'models/models.dart';
 
@@ -30,18 +33,15 @@ Future<void> createExcelFile(List<DbReportModel> reports) async {
   }
   try {
     List<int>? fileBytes = excel.encode();
-    // if (fileBytes != null) {
-    //   await file.writeAsBytes(fileBytes);
-    //   print("Saved at: ${file.path}");
-    // }
     if (fileBytes != null) {
-      await FileSaver.instance.saveFile(
-        name: "my_data",
-        bytes: Uint8List.fromList(fileBytes),
-        fileExtension: "xlsx",
-        // ext: "xlsx"
-      );
-      print("File Saved Succesfully");
+      final dir = await getExternalStorageDirectory();
+      final file = File('${dir!.path}/my_data.xlsx');
+
+      await file.writeAsBytes(fileBytes);
+
+      print("Saved at: ${file.path}");
+
+      await OpenFilex.open(file.path);
     }
   } catch (e) {
     print('Error saving file: $e');
