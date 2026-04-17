@@ -264,7 +264,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                               width: 100,
                               child: TextFormField(
                                 controller: drop.amVolumeController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                 textAlign: TextAlign.center,
                                 onChanged: (newValue) {
                                   final parsedValue = double.tryParse(newValue);
