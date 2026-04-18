@@ -12,42 +12,30 @@ class CheckedBoxProvider extends ChangeNotifier {
   Map<String, Map<String, bool>> mmValuesPerSymbol = {};
   Map<String, Map<String, bool>> am1ValuesPerSymbol = {};
   Map<String, Map<String, bool>> am2ValuesPerSymbol = {};
+  Map<String, Map<String, bool>> am3ValuesPerSymbol = {};
+  Map<String, Map<String, bool>> am4ValuesPerSymbol = {};
 
   static Map<String, bool> _mmEmptyValues() => {
     'LongTcChecked': false,
     'LongTtChecked': false,
     'LongNeoChecked': false,
-    'LongM1MfChecked': false,
-    'LongM1TrendChecked': false,
-    'LongM1ReversalChecked': false,
-    'LongConfChecked': false,
+    'LongSignalChecked': false,
+    'LongSignalExitChecked': false,
+    'LongMfChecked': false,
+    'LongHwChecked': false,
+    'LongReversalChecked': false,
+    'LongReversalPlusChecked': false,
     'LongDivergenceChecked': false,
-    'LongRevPlusChecked': false,
-    'LongCatcherChecked': false,
-    'LongM2MfChecked': false,
-    'LongM2HwChecked': false,
-    'LongM2HwThChecked': false,
-    // 'LongM2TrendChecked': false,
-    // 'LongM2ReversalChecked': false,
-    'LongGretTcChecked': false,
-    'LongSigCrTtChecked': false,
     'ShortTcChecked': false,
     'ShortTtChecked': false,
     'ShortNeoChecked': false,
-    'ShortM1MfChecked': false,
-    'ShortM1TrendChecked': false,
-    'ShortM1ReversalChecked': false,
-    'ShortConfChecked': false,
+    'ShortSignalChecked': false,
+    'ShortSignalExitChecked': false,
+    'ShortMfChecked': false,
+    'ShortHwChecked': false,
+    'ShortReversalChecked': false,
+    'ShortReversalPlusChecked': false,
     'ShortDivergenceChecked': false,
-    'ShortRevChecked': false,
-    'ShortCatcherChecked': false,
-    'ShortM2MfChecked': false,
-    // 'ShortM2TrendChecked': false,
-    // 'ShortM2ReversalChecked': false,
-    'ShortM2HwChecked': false,
-    'ShortM2HwThChecked': false,
-    'ShortGretTcChecked': false,
-    'ShortSigCrTtChecked': false,
     'MM1ReversalPlusPlusChecked': false,
     'MM1ReversalPlusChecked': false,
     'MM1ReversalChecked': false,
@@ -64,6 +52,22 @@ class CheckedBoxProvider extends ChangeNotifier {
     'MM2HwChecked': false,
     'MM2MfChecked': false,
     'MM2HWTHChecked': false,
+    'MM3ReversalPlusPlusChecked': false,
+    'MM3ReversalPlusChecked': false,
+    'MM3ReversalChecked': false,
+    'MM3SignalExitChecked': false,
+    'MM3TcChangeChecked': false,
+    'MM3HwChecked': false,
+    'MM3MfChecked': false,
+    'MM3HWTHChecked': false,
+    'MM4ReversalPlusPlusChecked': false,
+    'MM4ReversalPlusChecked': false,
+    'MM4ReversalChecked': false,
+    'MM4SignalExitChecked': false,
+    'MM4TcChangeChecked': false,
+    'MM4HwChecked': false,
+    'MM4MfChecked': false,
+    'MM4HWTHChecked': false,
   };
 
   static Map<String, bool> _am1EmptyValues() => {
@@ -88,6 +92,28 @@ class CheckedBoxProvider extends ChangeNotifier {
     'AM2HWTHChecked': false,
   };
 
+  static Map<String, bool> _am3EmptyValues() => {
+    'AM3ReversalPlusPlusChecked': false,
+    'AM3ReversalPlusChecked': false,
+    'AM3ReversalChecked': false,
+    'AM3SignalExitChecked': false,
+    'AM3TcChangeChecked': false,
+    'AM3HwChecked': false,
+    'AM3MfChecked': false,
+    'AM3HWTHChecked': false,
+  };
+
+  static Map<String, bool> _am4EmptyValues() => {
+    'AM4ReversalPlusPlusChecked': false,
+    'AM4ReversalPlusChecked': false,
+    'AM4ReversalChecked': false,
+    'AM4SignalExitChecked': false,
+    'AM4TcChangeChecked': false,
+    'AM4HwChecked': false,
+    'AM4MfChecked': false,
+    'AM4HWTHChecked': false,
+  };
+
   //Generic getter
   Map<String, bool> getValues(String method, String symbol) {
     if (method == "MM") {
@@ -96,6 +122,10 @@ class CheckedBoxProvider extends ChangeNotifier {
       return am1ValuesPerSymbol[symbol] ?? {};
     } else if (method == "AM2") {
       return am2ValuesPerSymbol[symbol] ?? {};
+    } else if (method == "AM3") {
+      return am3ValuesPerSymbol[symbol] ?? {};
+    } else if (method == "AM4") {
+      return am4ValuesPerSymbol[symbol] ?? {};
     }
     throw Exception("Invalid method");
   }
@@ -108,54 +138,62 @@ class CheckedBoxProvider extends ChangeNotifier {
   bool isLongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
 
-    return (v['LongTcChecked'] ?? false) &&
-        (v['LongTtChecked'] ?? false) &&
-        (v['LongNeoChecked'] ?? false) &&
-        (v['LongConfChecked'] ?? false);
+    return (v['LongTcChecked'] ?? false) && (v['LongTtChecked'] ?? false) && (v['LongNeoChecked'] ?? false);
   }
 
   bool isShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
 
-    return (v['ShortTcChecked'] ?? false) &&
-        (v['ShortTtChecked'] ?? false) &&
-        (v['ShortNeoChecked'] ?? false) &&
-        (v['ShortConfChecked'] ?? false);
+    return (v['ShortTcChecked'] ?? false) && (v['ShortTtChecked'] ?? false) && (v['ShortNeoChecked'] ?? false);
   }
 
   bool isM1LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
 
-    return ((isLongAllChecked(symbol) && (v['LongM1MfChecked'] ?? false) && (v['LongM1TrendChecked'] ?? false)) ||
-        (isLongAllChecked(symbol)) &&
-            !(v['LongM1MfChecked'] ?? false) &&
-            (v['LongM1ReversalChecked'] ?? false) &&
-            (v['LongM1TrendChecked'] ?? false));
+    return (isLongAllChecked(symbol) && (v['LongMfChecked'] ?? false) && (v['LongSignalChecked'] ?? false));
   }
 
   bool isM1ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return ((isShortAllChecked(symbol) && (v['ShortM1MfChecked'] ?? false) && (v['ShortM1TrendChecked'] ?? false)) ||
-        (isShortAllChecked(symbol) &&
-            !(v['ShortM1MfChecked'] ?? false) &&
-            (v['ShortM1ReversalChecked'] ?? false) &&
-            (v['ShortM1TrendChecked'] ?? false)));
+    return (isShortAllChecked(symbol) && (v['ShortMfChecked'] ?? false) && (v['ShortSignalChecked'] ?? false));
   }
 
   bool isM2LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return (((v['LongDivergenceChecked'] ?? false) || (v['LongRevPlusChecked'] ?? false)) &&
-        (v['LongCatcherChecked'] ?? false) &&
-        ((v['LongM2MfChecked'] ?? false) || (v['LongM2HwChecked'] ?? false)));
-    // || (v['LongHwThChecked'] ?? false)));
+    return (isLongAllChecked(symbol) &&
+        (v['LongSignalChecked'] ?? false) &&
+        ((v['LongReversalChecked'] ?? false) || (v['LongReversalPlusChecked'] ?? false)));
   }
 
   bool isM2ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return (((v['ShortDivergenceChecked'] ?? false) || (v['ShortRevChecked'] ?? false)) &&
-        (v['ShortCatcherChecked'] ?? false) &&
-        ((v['ShortM2MfChecked'] ?? false) || (v['ShortM2HwChecked'] ?? false)));
-    // || (v['ShortM2HwThChecked'] ?? false)));
+    return (isShortAllChecked(symbol) &&
+        (v['ShortSignalChecked'] ?? false) &&
+        ((v['ShortReversalChecked'] ?? false) || (v['ShortReversalPlusChecked'] ?? false)));
+  }
+
+  bool isM3LongAllChecked(String symbol) {
+    final v = getValues("MM", symbol);
+    return (isLongAllChecked(symbol) && (v['ShortSignalExitChecked'] ?? false));
+  }
+
+  bool isM3ShortAllChecked(String symbol) {
+    final v = getValues("MM", symbol);
+    return (isShortAllChecked(symbol) && (v['LongSignalExitChecked'] ?? false));
+  }
+
+  bool isM4LongAllChecked(String symbol) {
+    final v = getValues("MM", symbol);
+    return (((v['LongReversalPlusChecked'] ?? false) || (v['LongDivergenceChecked'] ?? false)) &&
+        (v['LongTcChecked'] ?? false) &&
+        ((v['LongMfChecked'] ?? false) || (v['LongHwChecked'] ?? false)));
+  }
+
+  bool isM4ShortAllChecked(String symbol) {
+    final v = getValues("MM", symbol);
+    return (((v['ShortReversalPlusChecked'] ?? false) || (v['ShortDivergenceChecked'] ?? false)) &&
+        (v['ShortTcChecked'] ?? false) &&
+        ((v['ShortMfChecked'] ?? false) || (v['ShortHwChecked'] ?? false)));
   }
 
   Future<void> loadFromApi(String symbol, String section) async {
@@ -174,10 +212,18 @@ class CheckedBoxProvider extends ChangeNotifier {
       if (section == 'AM2') {
         am2ValuesPerSymbol[symbol] = {..._am2EmptyValues(), ...result};
       }
+      if (section == 'AM3') {
+        am3ValuesPerSymbol[symbol] = {..._am3EmptyValues(), ...result};
+      }
+      if (section == 'AM4') {
+        am4ValuesPerSymbol[symbol] = {..._am4EmptyValues(), ...result};
+      }
     } catch (e) {
       mmValuesPerSymbol.clear();
       am1ValuesPerSymbol.clear();
       am2ValuesPerSymbol.clear();
+      am3ValuesPerSymbol.clear();
+      am4ValuesPerSymbol.clear();
     }
 
     _isLoading = false;
@@ -214,12 +260,26 @@ class CheckedBoxProvider extends ChangeNotifier {
 
       symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am2ValuesPerSymbol[symbol]!);
     }
+
+    if (method == 'AM3') {
+      am3ValuesPerSymbol[symbol] ??= _am3EmptyValues();
+      am3ValuesPerSymbol[symbol]![field] = !(am3ValuesPerSymbol[symbol]![field] ?? false);
+
+      symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am3ValuesPerSymbol[symbol]!);
+    }
+
+    if (method == 'AM4') {
+      am4ValuesPerSymbol[symbol] ??= _am2EmptyValues();
+      am4ValuesPerSymbol[symbol]![field] = !(am4ValuesPerSymbol[symbol]![field] ?? false);
+
+      symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am4ValuesPerSymbol[symbol]!);
+    }
     notifyListeners();
     if (field == 'MM1ReversalPlusPlusChecked' ||
         field == 'MM1ReversalPlusChecked' ||
         field == 'MM1ReversalChecked' ||
         field == 'MM1SignalExitChecked' ||
-        field == 'MM1TcChangeChecked' ||
+        // field == 'MM1TcChangeChecked' ||
         field == 'MM1HwChecked' ||
         field == 'MM1HWTHChecked' ||
         field == 'MM1MfChecked') {
@@ -231,10 +291,34 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'MM2ReversalPlusChecked' ||
         field == 'MM2ReversalChecked' ||
         field == 'MM2SignalExitChecked' ||
-        field == 'MM2TcChangeChecked' ||
+        // field == 'MM2TcChangeChecked' ||
         field == 'MM2HwChecked' ||
         field == 'MM2HWTHChecked' ||
         field == 'MM2MfChecked') {
+      final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
+      final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
+      var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
+      updateTradeFlags(crntMod, context);
+    } else if (field == 'MM3ReversalPlusPlusChecked' ||
+        field == 'MM3ReversalPlusChecked' ||
+        field == 'MM3ReversalChecked' ||
+        field == 'MM3SignalExitChecked' ||
+        // field == 'MM3TcChangeChecked' ||
+        field == 'MM3HwChecked' ||
+        field == 'MM3HWTHChecked' ||
+        field == 'MM3MfChecked') {
+      final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
+      final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
+      var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
+      updateTradeFlags(crntMod, context);
+    } else if (field == 'MM4ReversalPlusPlusChecked' ||
+        field == 'MM4ReversalPlusChecked' ||
+        field == 'MM4ReversalChecked' ||
+        field == 'MM4SignalExitChecked' ||
+        // field == 'MM4TcChangeChecked' ||
+        field == 'MM4HwChecked' ||
+        field == 'MM4HWTHChecked' ||
+        field == 'MM4MfChecked') {
       final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
       final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
       var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
@@ -243,7 +327,7 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'AM1ReversalPlusChecked' ||
         field == 'AM1ReversalChecked' ||
         field == 'AM1SignalExitChecked' ||
-        field == 'AM1TcChangeChecked' ||
+        // field == 'AM1TcChangeChecked' ||
         field == 'AM1HwChecked' ||
         field == 'AM1HWTHChecked' ||
         field == 'AM1MfChecked') {
@@ -253,13 +337,32 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'AM2ReversalPlusChecked' ||
         field == 'AM2ReversalChecked' ||
         field == 'AM2SignalExitChecked' ||
-        field == 'AM2TcChangeChecked' ||
+        // field == 'AM2TcChangeChecked' ||
         field == 'AM2HwChecked' ||
         field == 'AM2HWTHChecked' ||
         field == 'AM2MfChecked') {
       final currentSymbol = symbol;
       updateAutoTradeFlags(currentSymbol, method, context);
-      // updateTradeFlags(crntMod, context);
+    } else if (field == 'AM3ReversalPlusPlusChecked' ||
+        field == 'AM3ReversalPlusChecked' ||
+        field == 'AM3ReversalChecked' ||
+        field == 'AM3SignalExitChecked' ||
+        // field == 'AM3TcChangeChecked' ||
+        field == 'AM3HwChecked' ||
+        field == 'AM3HWTHChecked' ||
+        field == 'AM3MfChecked') {
+      final currentSymbol = symbol;
+      updateAutoTradeFlags(currentSymbol, method, context);
+    } else if (field == 'AM4ReversalPlusPlusChecked' ||
+        field == 'AM4ReversalPlusChecked' ||
+        field == 'AM4ReversalChecked' ||
+        field == 'AM4SignalExitChecked' ||
+        // field == 'AM4TcChangeChecked' ||
+        field == 'AM4HwChecked' ||
+        field == 'AM4HWTHChecked' ||
+        field == 'AM4MfChecked') {
+      final currentSymbol = symbol;
+      updateAutoTradeFlags(currentSymbol, method, context);
     } else {
       return;
     }

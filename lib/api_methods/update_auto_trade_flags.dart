@@ -35,6 +35,24 @@ Future<void> updateAutoTradeFlags(String symbol, String method, BuildContext con
     hw = checked.getValue(symbol, method, 'AM2HwChecked');
     hwTh = checked.getValue(symbol, method, 'AM2HWTHChecked');
     mf = checked.getValue(symbol, method, 'AM2MfChecked');
+  } else if (method == 'AM3') {
+    reversalPlusPlus = checked.getValue(symbol, method, 'AM3ReversalPlusPlusChecked');
+    reversalPlus = checked.getValue(symbol, method, 'AM3ReversalPlusChecked');
+    reversal = checked.getValue(symbol, method, 'AM3ReversalChecked');
+    signal = checked.getValue(symbol, method, 'AM3SignalExitChecked');
+    tc = checked.getValue(symbol, method, 'AM3TcChangeChecked');
+    hw = checked.getValue(symbol, method, 'AM3HwChecked');
+    hwTh = checked.getValue(symbol, method, 'AM3HWTHChecked');
+    mf = checked.getValue(symbol, method, 'AM3MfChecked');
+  } else if (method == 'AM4') {
+    reversalPlusPlus = checked.getValue(symbol, method, 'AM4ReversalPlusPlusChecked');
+    reversalPlus = checked.getValue(symbol, method, 'AM4ReversalPlusChecked');
+    reversal = checked.getValue(symbol, method, 'AM4ReversalChecked');
+    signal = checked.getValue(symbol, method, 'AM4SignalExitChecked');
+    tc = checked.getValue(symbol, method, 'AM4TcChangeChecked');
+    hw = checked.getValue(symbol, method, 'AM4HwChecked');
+    hwTh = checked.getValue(symbol, method, 'AM4HWTHChecked');
+    mf = checked.getValue(symbol, method, 'AM4MfChecked');
   }
   final data = {
     'symbol': symbol,

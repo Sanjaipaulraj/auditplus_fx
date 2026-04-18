@@ -45,6 +45,24 @@ Future<void> updateTradeFlags(CurrentOpenModel mod, BuildContext context) async 
     hw = checked.getValue(symbol, "MM", "MM2HwChecked");
     hwTh = checked.getValue(symbol, "MM", "MM2HWTHChecked");
     mf = checked.getValue(symbol, "MM", "MM2MfChecked");
+  } else if (mod.method == 'MM3') {
+    reversalPlusPlus = checked.getValue(symbol, "MM", "MM3ReversalPlusPlusChecked");
+    reversalPlus = checked.getValue(symbol, "MM", "MM3ReversalPlusChecked");
+    reversal = checked.getValue(symbol, "MM", "MM3ReversalChecked");
+    signal = checked.getValue(symbol, "MM", "MM3SignalExitChecked");
+    tc = checked.getValue(symbol, "MM", "MM3TcChangeChecked");
+    hw = checked.getValue(symbol, "MM", "MM3HwChecked");
+    hwTh = checked.getValue(symbol, "MM", "MM3HWTHChecked");
+    mf = checked.getValue(symbol, "MM", "MM3MfChecked");
+  } else if (mod.method == 'MM4') {
+    reversalPlusPlus = checked.getValue(symbol, "MM", "MM4ReversalPlusPlusChecked");
+    reversalPlus = checked.getValue(symbol, "MM", "MM4ReversalPlusChecked");
+    reversal = checked.getValue(symbol, "MM", "MM4ReversalChecked");
+    signal = checked.getValue(symbol, "MM", "MM4SignalExitChecked");
+    tc = checked.getValue(symbol, "MM", "MM4TcChangeChecked");
+    hw = checked.getValue(symbol, "MM", "MM4HwChecked");
+    hwTh = checked.getValue(symbol, "MM", "MM4HWTHChecked");
+    mf = checked.getValue(symbol, "MM", "MM4MfChecked");
   }
 
   final data = {

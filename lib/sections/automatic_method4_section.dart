@@ -6,14 +6,14 @@ import '../api_methods/api_methods.dart';
 import '../models/models.dart';
 import 'sections.dart';
 
-class AutomaticMethod3Section extends StatefulWidget {
-  const AutomaticMethod3Section({super.key});
+class AutomaticMethod4Section extends StatefulWidget {
+  const AutomaticMethod4Section({super.key});
 
   @override
-  State<AutomaticMethod3Section> createState() => _AutomaticMethod3SectionState();
+  State<AutomaticMethod4Section> createState() => _AutomaticMethod4SectionState();
 }
 
-class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
+class _AutomaticMethod4SectionState extends State<AutomaticMethod4Section> {
   Set<String> expandedSymbols = {};
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
         children: [
           Consumer<ValueProvider>(
             builder: (context, autoLive, child) {
-              if (autoLive.liveAutomaticTradeM3.isEmpty) {
+              if (autoLive.liveAutomaticTradeM4.isEmpty) {
                 return Text("No items found");
               } else {
                 return SingleChildScrollView(
@@ -38,7 +38,7 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                     width: MediaQuery.of(context).size.height * 0.7,
                     child: Consumer<ValueProvider>(
                       builder: (context, autoLive, child) {
-                        final items = autoLive.liveAutomaticTradeM3.values.toList();
+                        final items = autoLive.liveAutomaticTradeM4.values.toList();
                         return ListView.builder(
                           itemCount: items.length,
                           itemBuilder: (context, index) {
@@ -104,7 +104,7 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                                                   volume: items[index].volume,
                                                   isEnabled: true,
                                                   action: ActionType.close,
-                                                  method: "AM3",
+                                                  method: "AM4",
                                                 );
                                                 await automaticTrading(context, data);
                                               },
@@ -132,7 +132,7 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                                                   volume: items[index].volume,
                                                   isEnabled: false,
                                                   action: ActionType.disable,
-                                                  method: "AM3",
+                                                  method: "AM4",
                                                 );
                                                 await automaticTrading(context, data);
                                                 autoLive.removeLiveTrade(data.symbol, data.method);
@@ -164,7 +164,7 @@ class _AutomaticMethod3SectionState extends State<AutomaticMethod3Section> {
                                           ],
                                         ),
                                         if (expandedSymbols.contains(items[index].symbol))
-                                          AutomaticClosingSection(method: 'AM3', amSymbol: items[index].symbol),
+                                          AutomaticClosingSection(method: 'AM4', amSymbol: items[index].symbol),
                                       ],
                                     ),
                                   ),

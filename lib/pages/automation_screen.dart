@@ -161,6 +161,72 @@ class _AutomationScreenState extends State<AutomationScreen> {
                           ),
                         ),
                       ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => {
+                            am.changeMethodScreen('AM', Method.method4),
+                            _pageController.animateToPage(
+                              3,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            ),
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: am.autoScreenView == Method.method4
+                                  ? const Color.fromRGBO(33, 52, 72, 1)
+                                  // : Colors.transparent,
+                                  : Color.fromRGBO(209, 238, 250, 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Method4",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: am.autoScreenView == Method.method4 ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => {
+                            am.changeMethodScreen('AM', Method.method9),
+                            _pageController.animateToPage(
+                              4,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            ),
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: am.autoScreenView == Method.method9
+                                  ? const Color.fromRGBO(33, 52, 72, 1)
+                                  // : Colors.transparent,
+                                  : Color.fromRGBO(209, 238, 250, 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Method9",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: am.autoScreenView == Method.method9 ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -236,9 +302,12 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM1";
                                   } else if (drop.autoScreenView == Method.method2) {
                                     method = "AM2";
-                                  }
-                                  if (drop.autoScreenView == Method.method3) {
+                                  } else if (drop.autoScreenView == Method.method3) {
                                     method = "AM3";
+                                  } else if (drop.autoScreenView == Method.method4) {
+                                    method = "AM4";
+                                  } else if (drop.autoScreenView == Method.method9) {
+                                    method = "AM9";
                                   }
                                   String? symbol = drop.amSelectedValue;
                                   if (symbol != null && symbol != "") {
@@ -276,6 +345,10 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM2";
                                   } else if (drop.autoScreenView == Method.method3) {
                                     method = "AM3";
+                                  } else if (drop.autoScreenView == Method.method4) {
+                                    method = "AM4";
+                                  } else if (drop.autoScreenView == Method.method9) {
+                                    method = "AM9";
                                   }
                                   if (parsedValue != null) {
                                     drop.setAMVolume(method, parsedValue);
@@ -291,6 +364,10 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM2";
                                   } else if (drop.autoScreenView == Method.method3) {
                                     method = "AM3";
+                                  } else if (drop.autoScreenView == Method.method4) {
+                                    method = "AM4";
+                                  } else if (drop.autoScreenView == Method.method9) {
+                                    method = "AM9";
                                   }
                                   String? symbol = drop.amSelectedValue;
                                   if (symbol != null && symbol != "") {
@@ -348,9 +425,12 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                   method = "AM1";
                                 } else if (autoLive.autoScreenView == Method.method2) {
                                   method = "AM2";
-                                }
-                                if (autoLive.autoScreenView == Method.method3) {
+                                } else if (autoLive.autoScreenView == Method.method3) {
                                   method = "AM3";
+                                } else if (autoLive.autoScreenView == Method.method4) {
+                                  method = "AM4";
+                                } else if (autoLive.autoScreenView == Method.method9) {
+                                  method = "AM9";
                                 }
                                 String? symbol = autoLive.amSelectedValue;
                                 if (symbol != null && symbol != "") {
@@ -391,11 +471,21 @@ class _AutomationScreenState extends State<AutomationScreen> {
                         method = Method.method2;
                       } else if (index == 2) {
                         method = Method.method3;
+                      } else if (index == 3) {
+                        method = Method.method4;
+                      } else if (index == 4) {
+                        method = Method.method9;
                       }
                       screen.changeMethodScreen('AM', method);
                     },
                     physics: const BouncingScrollPhysics(),
-                    children: [AutomaticMethod1Section(), AutomaticMethod2Section(), AutomaticMethod3Section()],
+                    children: [
+                      AutomaticMethod1Section(),
+                      AutomaticMethod2Section(),
+                      AutomaticMethod3Section(),
+                      AutomaticMethod4Section(),
+                      AutomaticMethod9Section(),
+                    ],
                   );
                 },
               ),

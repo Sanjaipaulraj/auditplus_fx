@@ -288,7 +288,7 @@ class HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 10, bottom: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Consumer<ValueProvider>(
                                       builder: (context, drop, child) {
@@ -357,202 +357,27 @@ class HomeScreenState extends State<HomeScreen> {
                                         );
                                       },
                                     ),
-                                    Consumer<ValueProvider>(
-                                      builder: (context, drop, child) {
-                                        return SizedBox(
-                                          height: 35,
-                                          width: 90,
-                                          child: TextFormField(
-                                            controller: drop.manualVolumeController,
-                                            keyboardType: TextInputType.number,
-                                            textAlign: TextAlign.center,
-                                            onChanged: (newValue) {
-                                              final parsedValue = double.tryParse(newValue);
-                                              if (parsedValue != null) {
-                                                drop.setManualVolume(parsedValue);
-                                              }
-                                            },
-                                            textAlignVertical: TextAlignVertical.center,
-                                            decoration: InputDecoration(
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              isDense: true,
-                                              contentPadding: const EdgeInsets.symmetric(vertical: 6),
-
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                                borderSide: const BorderSide(color: Colors.grey),
-                                              ),
-
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                                borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(33, 52, 72, 1),
-                                                  width: 1.5,
-                                                ),
-                                              ),
-                                            ),
-
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        );
+                                    IconButton(
+                                      onPressed: () {
+                                        showDialog(context: context, builder: (context) => settingDialog());
                                       },
+                                      icon: Icon(Icons.settings, color: Colors.white),
                                     ),
-                                    Consumer<MytokenProvider>(
-                                      builder: (context, myToken, child) {
-                                        return ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            fixedSize: Size(100, 22),
-                                            backgroundColor: Color.fromRGBO(33, 52, 72, 1),
-                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                            elevation: 0.0,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
-                                              side: BorderSide(color: Color.fromRGBO(27, 29, 29, 1), width: 2),
-                                            ),
-                                            foregroundColor: Colors.white,
-                                            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () {
-                                            final token = Provider.of<MytokenProvider>(listen: false, context).token;
-                                            if (token != null) {
-                                              var symbol = context.read<ValueProvider>().manualSelectedValue;
-                                              Actions.invoke(context, CloseIntent(actionType: "POSITION_CLOSE_ID"));
-                                              if (symbol == null) {
-                                                toastification.show(
-                                                  backgroundColor: Color.fromRGBO(235, 225, 171, 1),
-                                                  context: context,
-                                                  title: const Text('Symbol!'),
-                                                  description: const Text('Select a symbol'),
-                                                  type: ToastificationType.info,
-                                                  alignment: Alignment.center,
-                                                  autoCloseDuration: const Duration(seconds: 1),
-                                                );
-                                              }
-                                            } else {
-                                              toastification.show(
-                                                backgroundColor: Color.fromRGBO(242, 186, 185, 1),
-                                                context: context,
-                                                title: const Text('Error!'),
-                                                description: const Text('Your token is empty'),
-                                                type: ToastificationType.error,
-                                                alignment: Alignment.center,
-                                                autoCloseDuration: const Duration(seconds: 1),
-                                              );
-                                            }
-                                          },
-                                          child: Text('Close'),
-                                        );
-                                      },
+                                    ElevatedButton(
+                                      onPressed: () => showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (context) => methodDialog(context),
+                                      ),
+                                      child: Text(
+                                        'All Methods',
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Consumer<ValueProvider>(
-                                builder: (context, mm, child) {
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: Color.fromRGBO(209, 238, 250, 1),
-                                      border: Border.all(color: Colors.black, width: 1.0),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () => {
-                                              mm.changeMethodScreen('MM', Method.method1),
-                                              _pageController.animateToPage(
-                                                0,
-                                                duration: Duration(milliseconds: 300),
-                                                curve: Curves.easeInOut,
-                                              ),
-                                            },
-                                            child: AnimatedContainer(
-                                              duration: const Duration(milliseconds: 200),
-                                              padding: const EdgeInsets.symmetric(vertical: 12),
-                                              decoration: BoxDecoration(
-                                                color: mm.manualScreenView == Method.method1
-                                                    ? const Color.fromRGBO(33, 52, 72, 1)
-                                                    // : Colors.transparent,
-                                                    : Color.fromRGBO(209, 238, 250, 1),
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Method1",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: mm.manualScreenView == Method.method1
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () => {
-                                              mm.changeMethodScreen('MM', Method.method2),
-                                              _pageController.animateToPage(
-                                                1,
-                                                duration: Duration(milliseconds: 300),
-                                                curve: Curves.easeInOut,
-                                              ),
-                                            },
-                                            child: AnimatedContainer(
-                                              duration: const Duration(milliseconds: 200),
-                                              padding: const EdgeInsets.symmetric(vertical: 12),
-                                              decoration: BoxDecoration(
-                                                color: mm.manualScreenView == Method.method2
-                                                    ? const Color.fromRGBO(33, 52, 72, 1)
-                                                    : Color.fromRGBO(209, 238, 250, 1),
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Method2",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: mm.manualScreenView == Method.method2
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.8,
-                                child: Consumer<ValueProvider>(
-                                  builder: (context, screen, child) {
-                                    return PageView(
-                                      controller: _pageController,
-                                      onPageChanged: (index) {
-                                        final method = index == 0 ? Method.method1 : Method.method2;
-                                        screen.changeMethodScreen('MM', method);
-                                      },
-                                      physics: const BouncingScrollPhysics(),
-                                      children: [ManualMethod1Section(), ManualMethod2Section()],
-                                    );
-                                  },
-                                ),
-                              ),
+                              SizedBox(height: MediaQuery.of(context).size.height * 0.8, child: ManualMethodSection()),
                             ],
                           ),
                         ),
@@ -564,4 +389,49 @@ class HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+}
+
+Widget settingDialog() {
+  return Dialog(
+    child: Container(
+      color: Color.fromRGBO(189, 232, 245, 1),
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text('Methods', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Method 1', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              Checkbox(value: false, onChanged: (_) {}),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Method 2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              Checkbox(value: false, onChanged: (_) {}),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Method 3', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              Checkbox(value: false, onChanged: (_) {}),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Method 4', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              Checkbox(value: false, onChanged: (_) {}),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }
