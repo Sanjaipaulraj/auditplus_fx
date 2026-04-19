@@ -138,118 +138,86 @@ class CheckedBoxProvider extends ChangeNotifier {
   bool isLongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
 
-    return (v['LongTcChecked'] ?? false) &&
-        (v['LongTtChecked'] ?? false) &&
-        (v['LongNeoChecked'] ?? false);
+    return (v['LongTcChecked'] ?? false) && (v['LongTtChecked'] ?? false) && (v['LongNeoChecked'] ?? false);
   }
 
   bool isShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
 
-    return (v['ShortTcChecked'] ?? false) &&
-        (v['ShortTtChecked'] ?? false) &&
-        (v['ShortNeoChecked'] ?? false);
+    return (v['ShortTcChecked'] ?? false) && (v['ShortTtChecked'] ?? false) && (v['ShortNeoChecked'] ?? false);
   }
 
   bool isM1LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
 
-    return
-        (isLongAllChecked(symbol) &&
-        (v['LongMfChecked'] ?? false) &&
-        (v['LongSignalChecked'] ?? false));
+    return (isLongAllChecked(symbol) && (v['LongMfChecked'] ?? false) && (v['LongSignalChecked'] ?? false));
   }
 
   bool isM1ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return
-        (isShortAllChecked(symbol) &&
-        (v['ShortMfChecked'] ?? false) &&
-        (v['ShortSignalChecked'] ?? false));
+    return (isShortAllChecked(symbol) && (v['ShortMfChecked'] ?? false) && (v['ShortSignalChecked'] ?? false));
   }
 
   bool isM2LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return
-        (isLongAllChecked(symbol) &&
+    return (isLongAllChecked(symbol) &&
         (v['LongSignalChecked'] ?? false) &&
-        ((v['LongReversalChecked'] ?? false) ||
-            (v['LongReversalPlusChecked'] ?? false)));
+        ((v['LongReversalChecked'] ?? false) || (v['LongReversalPlusChecked'] ?? false)));
   }
 
   bool isM2ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return
-        (isShortAllChecked(symbol) &&
+    return (isShortAllChecked(symbol) &&
         (v['ShortSignalChecked'] ?? false) &&
-        ((v['ShortReversalChecked'] ?? false) ||
-            (v['ShortReversalPlusChecked'] ?? false)));
+        ((v['ShortReversalChecked'] ?? false) || (v['ShortReversalPlusChecked'] ?? false)));
   }
 
   bool isM3LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
     return (isLongAllChecked(symbol) && (v['ShortSignalExitChecked'] ?? false));
-    
   }
 
   bool isM3ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
     return (isShortAllChecked(symbol) && (v['LongSignalExitChecked'] ?? false));
-     
   }
 
   bool isM4LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return (((v['LongReversalPlusChecked'] ?? false) ||
-            (v['LongDivergenceChecked'] ?? false)) &&
+    return (((v['LongReversalPlusChecked'] ?? false) || (v['LongDivergenceChecked'] ?? false)) &&
         (v['LongTcChecked'] ?? false) &&
         ((v['LongMfChecked'] ?? false) || (v['LongHwChecked'] ?? false)));
   }
 
   bool isM4ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
-    return  (((v['ShortReversalPlusChecked'] ?? false) ||
-            (v['ShortDivergenceChecked'] ?? false)) &&
+    return (((v['ShortReversalPlusChecked'] ?? false) || (v['ShortDivergenceChecked'] ?? false)) &&
         (v['ShortTcChecked'] ?? false) &&
         ((v['ShortMfChecked'] ?? false) || (v['ShortHwChecked'] ?? false)));
   }
 
-  Future<void> loadAll(String symbol) async {
+  Future<void> loadFromApi(String symbol, String section) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final mm = await getSymbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: 'MM',
-      );
-      final am1 = await getSymbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: 'AM1',
-      );
-      final am2 = await getSymbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: 'AM2',
-      );
-      final am3 = await getSymbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: 'AM3',
-      );
-      final am4 = await getSymbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: 'AM4',
-      );
+      final result = await getSymbolSetting(userId: "1", symbol: symbol, section: section);
 
-      mmValuesPerSymbol[symbol] = {..._mmEmptyValues(), ...mm};
-      am1ValuesPerSymbol[symbol] = {..._am1EmptyValues(), ...am1};
-      am2ValuesPerSymbol[symbol] = {..._am2EmptyValues(), ...am2};
-      am3ValuesPerSymbol[symbol] = {..._am3EmptyValues(), ...am3};
-      am4ValuesPerSymbol[symbol] = {..._am4EmptyValues(), ...am4};
+      if (section == 'MM') {
+        mmValuesPerSymbol[symbol] = {..._mmEmptyValues(), ...result};
+      }
+      if (section == 'AM1') {
+        am1ValuesPerSymbol[symbol] = {..._am1EmptyValues(), ...result};
+      }
+      if (section == 'AM2') {
+        am2ValuesPerSymbol[symbol] = {..._am2EmptyValues(), ...result};
+      }
+      if (section == 'AM3') {
+        am3ValuesPerSymbol[symbol] = {..._am3EmptyValues(), ...result};
+      }
+      if (section == 'AM4') {
+        am4ValuesPerSymbol[symbol] = {..._am4EmptyValues(), ...result};
+      }
     } catch (e) {
       mmValuesPerSymbol.clear();
       am1ValuesPerSymbol.clear();
@@ -262,15 +230,9 @@ class CheckedBoxProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeValue(
-    String symbol,
-    String method,
-    String field,
-    BuildContext context,
-  ) {
-    if (method == "MM") {
-      mmValuesPerSymbol[symbol]![field] =
-          !(mmValuesPerSymbol[symbol]![field] ?? false);
+  void changeValue(String symbol, String method, String field, BuildContext context) {
+    if (method == "MM1" || method == "MM2" || method == "MM") {
+      mmValuesPerSymbol[symbol]![field] = !(mmValuesPerSymbol[symbol]![field] ?? false);
 
       if (field.startsWith('Long')) {
         mmValuesPerSymbol[symbol]![field.replaceFirst('Long', 'Short')] = false;
@@ -287,54 +249,30 @@ class CheckedBoxProvider extends ChangeNotifier {
     }
     if (method == 'AM1') {
       am1ValuesPerSymbol[symbol] ??= _am1EmptyValues();
-      am1ValuesPerSymbol[symbol]![field] =
-          !(am1ValuesPerSymbol[symbol]![field] ?? false);
+      am1ValuesPerSymbol[symbol]![field] = !(am1ValuesPerSymbol[symbol]![field] ?? false);
 
-      symbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: method,
-        checkedValues: am1ValuesPerSymbol[symbol]!,
-      );
+      symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am1ValuesPerSymbol[symbol]!);
     }
 
     if (method == 'AM2') {
       am2ValuesPerSymbol[symbol] ??= _am2EmptyValues();
-      am2ValuesPerSymbol[symbol]![field] =
-          !(am2ValuesPerSymbol[symbol]![field] ?? false);
+      am2ValuesPerSymbol[symbol]![field] = !(am2ValuesPerSymbol[symbol]![field] ?? false);
 
-      symbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: method,
-        checkedValues: am2ValuesPerSymbol[symbol]!,
-      );
+      symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am2ValuesPerSymbol[symbol]!);
     }
 
     if (method == 'AM3') {
       am3ValuesPerSymbol[symbol] ??= _am3EmptyValues();
-      am3ValuesPerSymbol[symbol]![field] =
-          !(am3ValuesPerSymbol[symbol]![field] ?? false);
+      am3ValuesPerSymbol[symbol]![field] = !(am3ValuesPerSymbol[symbol]![field] ?? false);
 
-      symbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: method,
-        checkedValues: am3ValuesPerSymbol[symbol]!,
-      );
+      symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am3ValuesPerSymbol[symbol]!);
     }
 
     if (method == 'AM4') {
-      am4ValuesPerSymbol[symbol] ??= _am4EmptyValues();
-      am4ValuesPerSymbol[symbol]![field] =
-          !(am4ValuesPerSymbol[symbol]![field] ?? false);
+      am4ValuesPerSymbol[symbol] ??= _am2EmptyValues();
+      am4ValuesPerSymbol[symbol]![field] = !(am4ValuesPerSymbol[symbol]![field] ?? false);
 
-      symbolSetting(
-        userId: "1",
-        symbol: symbol,
-        section: method,
-        checkedValues: am4ValuesPerSymbol[symbol]!,
-      );
+      symbolSetting(userId: "1", symbol: symbol, section: method, checkedValues: am4ValuesPerSymbol[symbol]!);
     }
     notifyListeners();
     if (field == 'MM1ReversalPlusPlusChecked' ||
@@ -345,17 +283,9 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'MM1HwChecked' ||
         field == 'MM1HWTHChecked' ||
         field == 'MM1MfChecked') {
-      final symbol = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).manualSelectedValue;
-      final crnt = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).currentOpening;
-      var crntMod = crnt.firstWhere(
-        (el) => el.symbol == symbol && el.method == method,
-      );
+      final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
+      final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
+      var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
       updateTradeFlags(crntMod, context);
     } else if (field == 'MM2ReversalPlusPlusChecked' ||
         field == 'MM2ReversalPlusChecked' ||
@@ -365,17 +295,9 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'MM2HwChecked' ||
         field == 'MM2HWTHChecked' ||
         field == 'MM2MfChecked') {
-      final symbol = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).manualSelectedValue;
-      final crnt = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).currentOpening;
-      var crntMod = crnt.firstWhere(
-        (el) => el.symbol == symbol && el.method == method,
-      );
+      final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
+      final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
+      var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
       updateTradeFlags(crntMod, context);
     } else if (field == 'MM3ReversalPlusPlusChecked' ||
         field == 'MM3ReversalPlusChecked' ||
@@ -385,17 +307,9 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'MM3HwChecked' ||
         field == 'MM3HWTHChecked' ||
         field == 'MM3MfChecked') {
-      final symbol = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).manualSelectedValue;
-      final crnt = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).currentOpening;
-      var crntMod = crnt.firstWhere(
-        (el) => el.symbol == symbol && el.method == method,
-      );
+      final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
+      final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
+      var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
       updateTradeFlags(crntMod, context);
     } else if (field == 'MM4ReversalPlusPlusChecked' ||
         field == 'MM4ReversalPlusChecked' ||
@@ -405,17 +319,9 @@ class CheckedBoxProvider extends ChangeNotifier {
         field == 'MM4HwChecked' ||
         field == 'MM4HWTHChecked' ||
         field == 'MM4MfChecked') {
-      final symbol = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).manualSelectedValue;
-      final crnt = Provider.of<ValueProvider>(
-        context,
-        listen: false,
-      ).currentOpening;
-      var crntMod = crnt.firstWhere(
-        (el) => el.symbol == symbol && el.method == method,
-      );
+      final symbol = Provider.of<ValueProvider>(context, listen: false).manualSelectedValue;
+      final crnt = Provider.of<ValueProvider>(context, listen: false).currentOpening;
+      var crntMod = crnt.firstWhere((el) => el.symbol == symbol && el.method == method);
       updateTradeFlags(crntMod, context);
     } else if (field == 'AM1ReversalPlusPlusChecked' ||
         field == 'AM1ReversalPlusChecked' ||

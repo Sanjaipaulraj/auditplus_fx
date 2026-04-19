@@ -47,7 +47,7 @@ class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
                             if (!context.read<CheckedBoxProvider>().am1ValuesPerSymbol.containsKey(symbol)) {
                               Future.microtask(() {
                                 // ignore: use_build_context_synchronously
-                                context.read<CheckedBoxProvider>().loadFromApi(symbol, 'AM1');
+                                context.read<CheckedBoxProvider>().loadAll(symbol);
                               });
                             }
                             return Padding(

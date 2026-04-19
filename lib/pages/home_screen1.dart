@@ -343,9 +343,7 @@ class HomeScreenState extends State<HomeScreen> {
 
                                               context.read<ValueProvider>().setSelectedItem(item, context);
                                               // context.read<CheckedBoxProvider>().loadForSymbol(item.value!);
-                                              context.read<CheckedBoxProvider>().loadFromApi(item.value!, 'MM');
-                                              context.read<CheckedBoxProvider>().loadFromApi(item.value!, 'AM1');
-                                              context.read<CheckedBoxProvider>().loadFromApi(item.value!, 'AM2');
+                                              context.read<CheckedBoxProvider>().loadAll(item.value!);
                                             },
                                             onSubmit: (item) {
                                               Provider.of<ValueProvider>(

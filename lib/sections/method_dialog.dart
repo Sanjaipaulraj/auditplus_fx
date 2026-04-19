@@ -4,6 +4,7 @@ import 'package:toastification/toastification.dart';
 
 import '../Providers/providers.dart';
 import '../intent.dart';
+import 'sections.dart';
 
 Widget methodDialog(BuildContext context) {
   return Dialog(
@@ -11,7 +12,10 @@ Widget methodDialog(BuildContext context) {
     child: Container(
       width: MediaQuery.of(context).size.width * 0.95,
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(color: Color.fromRGBO(189, 232, 245, 1), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(189, 232, 245, 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Consumer2<CheckedBoxProvider, ValueProvider>(
         builder: (context, check, val, child) {
           final symbol = val.manualSelectedValue ?? "";
@@ -47,83 +51,157 @@ Widget methodDialog(BuildContext context) {
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM1LongAllChecked(symbol)
+                          backgroundColor:
+                              check.isM1LongAllChecked(symbol) &&
+                                  val.isM1Checked
                               ? Colors.lightGreen
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM1LongAllChecked(symbol)
+                        onPressed:
+                            check.isM1LongAllChecked(symbol) && val.isM1Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM1', actionType: "ORDER_TYPE_BUY"),
+                                    const LongIntent(
+                                      method: 'MM1',
+                                      actionType: "ORDER_TYPE_BUY",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Long', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Long',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM1ShortAllChecked(symbol)
+                          backgroundColor:
+                              check.isM1ShortAllChecked(symbol) &&
+                                  val.isM1Checked
                               ? Colors.red
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM1ShortAllChecked(symbol)
+                        onPressed:
+                            check.isM1ShortAllChecked(symbol) && val.isM1Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM1', actionType: "ORDER_TYPE_SELL"),
+                                    const LongIntent(
+                                      method: 'MM1',
+                                      actionType: "ORDER_TYPE_SELL",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Short', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Short',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Color.fromRGBO(33, 52, 72, 1),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text('Close', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          if (symbol != "") {
+                            Actions.invoke(
+                              context,
+                              CloseIntent(actionType: "POSITION_CLOSE_ID"),
+                            );
+                          } else {
+                            toastification.show(
+                              backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                              context: context,
+                              title: const Text('Symbol!'),
+                              description: const Text('Select a Symbol'),
+                              type: ToastificationType.info,
+                              alignment: Alignment.center,
+                              autoCloseDuration: const Duration(seconds: 1),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Consumer<ValueProvider>(
                         builder: (context, vol, child) {
@@ -141,35 +219,67 @@ Widget methodDialog(BuildContext context) {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: const Color.fromARGB(252, 255, 255, 255),
+                                fillColor: const Color.fromARGB(
+                                  252,
+                                  255,
+                                  255,
+                                  255,
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 6),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Colors.grey),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color.fromRGBO(33, 52, 72, 1), width: 1.5),
+                                  borderSide: const BorderSide(
+                                    color: Color.fromRGBO(33, 52, 72, 1),
+                                    width: 1.5,
+                                  ),
                                 ),
                               ),
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           );
                         },
                       ),
                       IconButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(35, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-                          tapTargetSize: MaterialTapTargetSize.padded,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.grey, width: 1.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {},
-                        icon: Icon(Icons.add, color: Colors.black),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(
+                                    context,
+                                  ).viewInsets.bottom,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(189, 232, 245, 1),
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: AutomaticClosingSection(method: "MM1"),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.add_box, color: Colors.black, size: 40),
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                       ),
@@ -195,84 +305,158 @@ Widget methodDialog(BuildContext context) {
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM2LongAllChecked(symbol)
+                          backgroundColor:
+                              check.isM2LongAllChecked(symbol) &&
+                                  val.isM2Checked
                               ? Colors.lightGreen
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM2LongAllChecked(symbol)
+                        onPressed:
+                            check.isM2LongAllChecked(symbol) && val.isM2Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM2', actionType: "ORDER_TYPE_BUY"),
+                                    const LongIntent(
+                                      method: 'MM2',
+                                      actionType: "ORDER_TYPE_BUY",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Long', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Long',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM2ShortAllChecked(symbol)
+                          backgroundColor:
+                              check.isM2ShortAllChecked(symbol) &&
+                                  val.isM2Checked
                               ? Colors.red
                               : Color.fromARGB(255, 199, 199, 199),
 
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM2ShortAllChecked(symbol)
+                        onPressed:
+                            check.isM2ShortAllChecked(symbol) && val.isM2Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM2', actionType: "ORDER_TYPE_SELL"),
+                                    const LongIntent(
+                                      method: 'MM2',
+                                      actionType: "ORDER_TYPE_SELL",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Short', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Short',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Color.fromRGBO(33, 52, 72, 1),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text('Close', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          if (symbol != "") {
+                            Actions.invoke(
+                              context,
+                              CloseIntent(actionType: "POSITION_CLOSE_ID"),
+                            );
+                          } else {
+                            toastification.show(
+                              backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                              context: context,
+                              title: const Text('Symbol!'),
+                              description: const Text('Select a Symbol'),
+                              type: ToastificationType.info,
+                              alignment: Alignment.center,
+                              autoCloseDuration: const Duration(seconds: 1),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Consumer<ValueProvider>(
                         builder: (context, vol, child) {
@@ -290,35 +474,67 @@ Widget methodDialog(BuildContext context) {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: const Color.fromARGB(252, 255, 255, 255),
+                                fillColor: const Color.fromARGB(
+                                  252,
+                                  255,
+                                  255,
+                                  255,
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 6),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Colors.grey),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color.fromRGBO(33, 52, 72, 1), width: 1.5),
+                                  borderSide: const BorderSide(
+                                    color: Color.fromRGBO(33, 52, 72, 1),
+                                    width: 1.5,
+                                  ),
                                 ),
                               ),
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           );
                         },
                       ),
                       IconButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(35, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-                          tapTargetSize: MaterialTapTargetSize.padded,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.grey, width: 1.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {},
-                        icon: Icon(Icons.add, color: Colors.black),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(
+                                    context,
+                                  ).viewInsets.bottom,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(189, 232, 245, 1),
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: AutomaticClosingSection(method: "MM2"),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.add_box, color: Colors.black, size: 40),
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                       ),
@@ -344,83 +560,157 @@ Widget methodDialog(BuildContext context) {
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM3LongAllChecked(symbol)
+                          backgroundColor:
+                              check.isM3LongAllChecked(symbol) &&
+                                  val.isM3Checked
                               ? Colors.lightGreen
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM3LongAllChecked(symbol)
+                        onPressed:
+                            check.isM3LongAllChecked(symbol) && val.isM3Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM3', actionType: "ORDER_TYPE_BUY"),
+                                    const LongIntent(
+                                      method: 'MM3',
+                                      actionType: "ORDER_TYPE_BUY",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Long', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Long',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM3ShortAllChecked(symbol)
+                          backgroundColor:
+                              check.isM3ShortAllChecked(symbol) &&
+                                  val.isM3Checked
                               ? Colors.red
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM3ShortAllChecked(symbol)
+                        onPressed:
+                            check.isM3ShortAllChecked(symbol) && val.isM3Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM3', actionType: "ORDER_TYPE_SELL"),
+                                    const LongIntent(
+                                      method: 'MM3',
+                                      actionType: "ORDER_TYPE_SELL",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Short', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Short',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Color.fromRGBO(33, 52, 72, 1),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text('Close', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          if (symbol != "") {
+                            Actions.invoke(
+                              context,
+                              CloseIntent(actionType: "POSITION_CLOSE_ID"),
+                            );
+                          } else {
+                            toastification.show(
+                              backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                              context: context,
+                              title: const Text('Symbol!'),
+                              description: const Text('Select a Symbol'),
+                              type: ToastificationType.info,
+                              alignment: Alignment.center,
+                              autoCloseDuration: const Duration(seconds: 1),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Consumer<ValueProvider>(
                         builder: (context, vol, child) {
@@ -438,35 +728,67 @@ Widget methodDialog(BuildContext context) {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: const Color.fromARGB(252, 255, 255, 255),
+                                fillColor: const Color.fromARGB(
+                                  252,
+                                  255,
+                                  255,
+                                  255,
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 6),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Colors.grey),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color.fromRGBO(33, 52, 72, 1), width: 1.5),
+                                  borderSide: const BorderSide(
+                                    color: Color.fromRGBO(33, 52, 72, 1),
+                                    width: 1.5,
+                                  ),
                                 ),
                               ),
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           );
                         },
                       ),
                       IconButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(35, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-                          tapTargetSize: MaterialTapTargetSize.padded,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.grey, width: 1.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {},
-                        icon: Icon(Icons.add, color: Colors.black),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(
+                                    context,
+                                  ).viewInsets.bottom,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(189, 232, 245, 1),
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: AutomaticClosingSection(method: "MM3"),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.add_box, color: Colors.black, size: 40),
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                       ),
@@ -492,83 +814,157 @@ Widget methodDialog(BuildContext context) {
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM4LongAllChecked(symbol)
+                          backgroundColor:
+                              check.isM4LongAllChecked(symbol) &&
+                                  val.isM4Checked
                               ? Colors.lightGreen
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM4LongAllChecked(symbol)
+                        onPressed:
+                            check.isM4LongAllChecked(symbol) && val.isM4Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM4', actionType: "ORDER_TYPE_BUY"),
+                                    const LongIntent(
+                                      method: 'MM4',
+                                      actionType: "ORDER_TYPE_BUY",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Long', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Long',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          backgroundColor: check.isM4ShortAllChecked(symbol)
+                          backgroundColor:
+                              check.isM4ShortAllChecked(symbol) &&
+                                  val.isM4Checked
                               ? Colors.red
                               : Color.fromARGB(255, 199, 199, 199),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: check.isM4ShortAllChecked(symbol)
+                        onPressed:
+                            check.isM4ShortAllChecked(symbol) && val.isM4Checked
                             ? () {
                                 if (symbol != "") {
                                   Actions.invoke(
                                     context,
-                                    const LongIntent(method: 'MM4', actionType: "ORDER_TYPE_SELL"),
+                                    const LongIntent(
+                                      method: 'MM4',
+                                      actionType: "ORDER_TYPE_SELL",
+                                    ),
                                   );
                                 } else {
                                   toastification.show(
-                                    backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                                    backgroundColor: Color.fromRGBO(
+                                      242,
+                                      186,
+                                      185,
+                                      1,
+                                    ),
                                     context: context,
                                     title: const Text('Error!'),
                                     description: const Text('Select Symbol'),
                                     type: ToastificationType.error,
                                     alignment: Alignment.center,
-                                    autoCloseDuration: const Duration(seconds: 2),
+                                    autoCloseDuration: const Duration(
+                                      seconds: 2,
+                                    ),
                                   );
                                 }
                               }
                             : null,
-                        child: Text('Short', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'Short',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Color.fromRGBO(33, 52, 72, 1),
                           minimumSize: Size(55, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text('Close', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          if (symbol != "") {
+                            Actions.invoke(
+                              context,
+                              CloseIntent(actionType: "POSITION_CLOSE_ID"),
+                            );
+                          } else {
+                            toastification.show(
+                              backgroundColor: Color.fromRGBO(242, 186, 185, 1),
+                              context: context,
+                              title: const Text('Symbol!'),
+                              description: const Text('Select a Symbol'),
+                              type: ToastificationType.info,
+                              alignment: Alignment.center,
+                              autoCloseDuration: const Duration(seconds: 1),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Consumer<ValueProvider>(
                         builder: (context, vol, child) {
@@ -586,36 +982,71 @@ Widget methodDialog(BuildContext context) {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: const Color.fromARGB(252, 255, 255, 255),
+                                fillColor: const Color.fromARGB(
+                                  252,
+                                  255,
+                                  255,
+                                  255,
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(vertical: 6),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Colors.grey),
+                                  borderSide: const BorderSide(
+                                    color: Colors.grey,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color.fromRGBO(33, 52, 72, 1), width: 1.5),
+                                  borderSide: const BorderSide(
+                                    color: Color.fromRGBO(33, 52, 72, 1),
+                                    width: 1.5,
+                                  ),
                                 ),
                               ),
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           );
                         },
                       ),
-
                       IconButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(35, 40),
-                          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-                          tapTargetSize: MaterialTapTargetSize.padded,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.grey, width: 1.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(
+                                    context,
+                                  ).viewInsets.bottom,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(189, 232, 245, 1),
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: AutomaticClosingSection(method: "MM4"),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(
+                          Icons.add_box,
+                          color: Colors.black,
+                          size: 40,
                         ),
-                        onPressed: () {},
-                        icon: Icon(Icons.add, color: Colors.black),
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                       ),

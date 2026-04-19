@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
-import 'package:toastification/toastification.dart';
 import 'package:auditplus_fx/drawer_widget.dart';
 import 'package:auditplus_fx/intent.dart';
 
@@ -28,8 +27,8 @@ class HomeScreenState extends State<HomeScreen> {
   List<String> list = [];
   List<SearchFieldListItem<String>> symbols = [];
   bool isLoading = true;
+  bool _dialogShown = false;
   // late Future _initFuture;
-  late PageController _pageController;
 
   late TextEditingController _tokenController;
   late FocusNode _symbolFocusNode;
@@ -41,7 +40,6 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _symbolFocusNode = FocusNode();
     _tokenController = TextEditingController();
 
@@ -108,7 +106,10 @@ class HomeScreenState extends State<HomeScreen> {
               spacing: 15,
               children: [
                 Center(
-                  child: Text("Token getting...", style: TextStyle(fontSize: 16, color: Colors.black)),
+                  child: Text(
+                    "Token getting...",
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
                 ),
                 CircularProgressIndicator(),
               ],
@@ -140,11 +141,17 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 15,
                 children: [
-                  const Text('Enter the token', style: TextStyle(fontSize: 16, color: Colors.black)),
+                  const Text(
+                    'Enter the token',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
                   const SizedBox(height: 10),
                   TextField(
                     controller: _tokenController,
-                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Token'),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Token',
+                    ),
                   ),
                   TextButton(
                     style: ElevatedButton.styleFrom(
@@ -187,14 +194,22 @@ class HomeScreenState extends State<HomeScreen> {
                           // ? Color.fromRGBO(120, 255, 165, 0.884)
                           ? Color.fromRGBO(44, 187, 104, 1)
                           : Color.fromRGBO(189, 232, 245, 1),
-                      foregroundColor: auto.isAutomaticSectionEnabled ? Color.fromRGBO(2, 12, 40, 1) : Colors.black,
+                      foregroundColor: auto.isAutomaticSectionEnabled
+                          ? Color.fromRGBO(2, 12, 40, 1)
+                          : Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide(color: Colors.white, width: 2),
                       ),
                     ),
                     onPressed: () => auto.setAutomaticEnable(),
-                    child: Text('AUTO', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      'AUTO',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   );
                 },
               ),
@@ -216,14 +231,19 @@ class HomeScreenState extends State<HomeScreen> {
                             autofocus: true,
                             controller: _tokenController,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
                               labelText: 'Token',
                             ),
                           ),
                           TextButton(
                             onPressed: () {
                               String enteredToken = _tokenController.text;
-                              Provider.of<MytokenProvider>(context, listen: false).setToken(enteredToken);
+                              Provider.of<MytokenProvider>(
+                                context,
+                                listen: false,
+                              ).setToken(enteredToken);
                               Navigator.pop(context);
                             },
                             child: const Text('Submit'),
@@ -233,38 +253,88 @@ class HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                child: Padding(padding: const EdgeInsets.all(8.0), child: Icon(Icons.settings)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.token_rounded),
+                ),
               ),
             ],
             title: Text('Auditplus Fx', style: TextStyle(color: Colors.white)),
           ),
           body: Shortcuts(
             shortcuts: {
-              LogicalKeySet(LogicalKeyboardKey.keyL, LogicalKeyboardKey.control): const LongIntent(
+              LogicalKeySet(
+                LogicalKeyboardKey.keyL,
+                LogicalKeyboardKey.control,
+              ): const LongIntent(
                 method: 'MM1',
                 actionType: "ORDER_TYPE_BUY",
               ),
-              LogicalKeySet(LogicalKeyboardKey.keyS, LogicalKeyboardKey.control): const ShortIntent(
+              LogicalKeySet(
+                LogicalKeyboardKey.keyS,
+                LogicalKeyboardKey.control,
+              ): const ShortIntent(
                 method: 'MM1',
                 actionType: "ORDER_TYPE_SELL",
               ),
-              LogicalKeySet(LogicalKeyboardKey.keyC, LogicalKeyboardKey.control): CloseIntent(
+              LogicalKeySet(
+                LogicalKeyboardKey.keyC,
+                LogicalKeyboardKey.control,
+              ): CloseIntent(
                 actionType: "POSITION_CLOSE_ID",
               ),
             },
-            child: Consumer<ValueProvider>(
-              builder: (context, auto, child) {
+            child: Consumer2<ValueProvider, CheckedBoxProvider>(
+              builder: (context, auto, check, child) {
+                final symbol = auto.manualSelectedValue;
+
+                if (symbol != null) {
+                  final condition =
+                      check.isM1LongAllChecked(symbol) ||
+                      check.isM1ShortAllChecked(symbol) ||
+                      check.isM2LongAllChecked(symbol) ||
+                      check.isM2ShortAllChecked(symbol) ||
+                      check.isM3LongAllChecked(symbol) ||
+                      check.isM3ShortAllChecked(symbol) ||
+                      check.isM4LongAllChecked(symbol) ||
+                      check.isM4ShortAllChecked(symbol);
+
+                  if (condition && !_dialogShown) {
+                    _dialogShown = true;
+
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => methodDialog(context),
+                      );
+                    });
+                  }
+
+                  if (!condition) {
+                    _dialogShown = false;
+                  }
+                }
                 return Actions(
                   actions: {
                     LongIntent: CallbackAction<LongIntent>(
                       onInvoke: (intent) {
-                        openPosition(intent.method, 'ORDER_TYPE_BUY', null, context);
+                        openPosition(
+                          intent.method,
+                          'ORDER_TYPE_BUY',
+                          null,
+                          context,
+                        );
                         return null;
                       },
                     ),
                     ShortIntent: CallbackAction<ShortIntent>(
                       onInvoke: (intent) {
-                        openPosition(intent.method, 'ORDER_TYPE_SELL', null, context);
+                        openPosition(
+                          intent.method,
+                          'ORDER_TYPE_SELL',
+                          null,
+                          context,
+                        );
                         return null;
                       },
                     ),
@@ -283,11 +353,21 @@ class HomeScreenState extends State<HomeScreen> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Container(
-                                constraints: BoxConstraints(maxWidth: double.infinity),
-                                decoration: BoxDecoration(color: Color.fromRGBO(84, 119, 146, 1)),
-                                padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 10, bottom: 5),
+                                constraints: BoxConstraints(
+                                  maxWidth: double.infinity,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(84, 119, 146, 1),
+                                ),
+                                padding: const EdgeInsets.only(
+                                  left: 12.0,
+                                  right: 12.0,
+                                  top: 10,
+                                  bottom: 5,
+                                ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Consumer<ValueProvider>(
@@ -300,84 +380,154 @@ class HomeScreenState extends State<HomeScreen> {
                                             suggestions: symbols,
                                             suggestionState: Suggestion.hidden,
                                             // selectedValue: drop.manualSelectedItem,
-                                            selectedValue: symbols.contains(drop.manualSelectedItem)
+                                            selectedValue:
+                                                symbols.contains(
+                                                  drop.manualSelectedItem,
+                                                )
                                                 ? drop.manualSelectedItem
                                                 : null,
-                                            searchInputDecoration: SearchInputDecoration(
-                                              hintText: "Symbols",
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              isDense: true,
-                                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                            searchInputDecoration:
+                                                SearchInputDecoration(
+                                                  hintText: "Symbols",
+                                                  filled: true,
+                                                  fillColor: Colors.white,
+                                                  isDense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 6,
+                                                      ),
 
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                                borderSide: const BorderSide(color: Colors.grey, width: 1),
-                                              ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              8,
+                                                            ),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 1,
+                                                            ),
+                                                      ),
 
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                                borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(33, 52, 72, 1),
-                                                  width: 1.5,
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              8,
+                                                            ),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                              color:
+                                                                  Color.fromRGBO(
+                                                                    33,
+                                                                    52,
+                                                                    72,
+                                                                    1,
+                                                                  ),
+                                                              width: 1.5,
+                                                            ),
+                                                      ),
                                                 ),
-                                              ),
-                                            ),
                                             maxSuggestionsInViewPort: 6,
                                             onSearchTextChanged: (searchText) {
                                               if (searchText.isEmpty) {
-                                                return List<SearchFieldListItem<String>>.from(symbols);
+                                                return List<
+                                                  SearchFieldListItem<String>
+                                                >.from(symbols);
                                               }
                                               // context.read<ValueProvider>().clearSelectedValue();
                                               // context.read<CheckedBoxProvider>().clearState("MM");
 
-                                              final query = searchText.toUpperCase();
+                                              final query = searchText
+                                                  .toUpperCase();
                                               return symbols.where((s) {
-                                                final key = s.searchKey.toUpperCase();
-                                                final value = (s.value ?? '').toUpperCase();
-                                                return key.contains(query) || value.contains(query);
+                                                final key = s.searchKey
+                                                    .toUpperCase();
+                                                final value = (s.value ?? '')
+                                                    .toUpperCase();
+                                                return key.contains(query) ||
+                                                    value.contains(query);
                                               }).toList();
                                             },
-                                            onSuggestionTap: (SearchFieldListItem<String> item) {
-                                              _symbolFocusNode.unfocus();
+                                            onSuggestionTap:
+                                                (
+                                                  SearchFieldListItem<String>
+                                                  item,
+                                                ) {
+                                                  _symbolFocusNode.unfocus();
 
-                                              context.read<ValueProvider>().setSelectedItem(item, context);
-                                              // context.read<CheckedBoxProvider>().loadForSymbol(item.value!);
-                                              context.read<CheckedBoxProvider>().loadFromApi(item.value!, 'MM');
-                                              context.read<CheckedBoxProvider>().loadFromApi(item.value!, 'AM1');
-                                              context.read<CheckedBoxProvider>().loadFromApi(item.value!, 'AM2');
-                                            },
+                                                  context
+                                                      .read<ValueProvider>()
+                                                      .setSelectedItem(
+                                                        item,
+                                                        context,
+                                                      );
+                                                  // context.read<CheckedBoxProvider>().loadForSymbol(item.value!);
+                                                  context
+                                                      .read<
+                                                        CheckedBoxProvider
+                                                      >()
+                                                      .loadAll(item.value!);
+                                                },
                                             onSubmit: (item) {
                                               Provider.of<ValueProvider>(
                                                 context,
                                                 listen: false,
-                                              ).setSelectedItem(SearchFieldListItem(item), context);
+                                              ).setSelectedItem(
+                                                SearchFieldListItem(item),
+                                                context,
+                                              );
                                             },
                                           ),
                                         );
                                       },
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        showDialog(context: context, builder: (context) => settingDialog());
-                                      },
-                                      icon: Icon(Icons.settings, color: Colors.white),
-                                    ),
                                     ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                      ),
                                       onPressed: () => showDialog(
                                         barrierDismissible: false,
                                         context: context,
-                                        builder: (context) => methodDialog(context),
+                                        builder: (context) =>
+                                            methodDialog(context),
                                       ),
                                       child: Text(
                                         'All Methods',
-                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => settingDialog(),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.settings,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.8, child: ManualMethodSection()),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                child: ManualMethodSection(),
+                              ),
                             ],
                           ),
                         ),
@@ -396,41 +546,84 @@ Widget settingDialog() {
     child: Container(
       color: Color.fromRGBO(189, 232, 245, 1),
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text('Methods', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Method 1', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              Checkbox(value: false, onChanged: (_) {}),
+      child: Consumer<ValueProvider>(
+        builder: (context, val, child) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'Methods',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Method 1',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  Checkbox(
+                    value: val.isM1Checked,
+                    onChanged: (_) {
+                      val.enableMethod("MM1");
+                    },
+                    activeColor: Colors.green,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Method 2',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  Checkbox(
+                    value: val.isM2Checked,
+                    onChanged: (_) {
+                      val.enableMethod("MM2");
+                    },
+                    activeColor: Colors.green,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Method 3',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  Checkbox(
+                    value: val.isM3Checked,
+                    onChanged: (value) {
+                      val.enableMethod("MM3");
+                    },
+                    activeColor: Colors.green,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Method 4',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  Checkbox(
+                    value: val.isM4Checked,
+                    onChanged: (_) {
+                      val.enableMethod("MM4");
+                    },
+                    activeColor: Colors.green,
+                  ),
+                ],
+              ),
             ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Method 2', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              Checkbox(value: false, onChanged: (_) {}),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Method 3', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              Checkbox(value: false, onChanged: (_) {}),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Method 4', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              Checkbox(value: false, onChanged: (_) {}),
-            ],
-          ),
-        ],
+          );
+        },
       ),
     ),
   );
