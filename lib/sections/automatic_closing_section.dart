@@ -100,6 +100,17 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM4': 'AM4MfChecked',
   }[widget.method]!;
 
+  String get hwTt => {
+    'MM1': 'MM1HWTTChecked',
+    'MM2': 'MM2HWTTChecked',
+    'MM3': 'MM3HWTTChecked',
+    'MM4': 'MM4HWTTChecked',
+    'AM1': 'AM1HWTTChecked',
+    'AM2': 'AM2HWTTChecked',
+    'AM3': 'AM3HWTTChecked',
+    'AM4': 'AM4HWTTChecked',
+  }[widget.method]!;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CheckedBoxProvider>(
@@ -660,6 +671,58 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
                   ],
                 ),
               ),
+              // ElevatedButton(
+              //   style: checkedbox.getValue(symbol, method, hwTt)
+              //       ? ElevatedButton.styleFrom(
+              //           minimumSize: Size.zero,
+              //           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              //           elevation: 0,
+              //           shape: RoundedRectangleBorder(
+              //             side: BorderSide(),
+              //             borderRadius: BorderRadiusGeometry.circular(10),
+              //           ),
+              //           foregroundColor: Colors.white,
+              //           backgroundColor: Color.fromRGBO(33, 52, 72, 1),
+              //         )
+              //       : ElevatedButton.styleFrom(
+              //           minimumSize: Size.zero,
+              //           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              //           elevation: 0,
+              //           shape: RoundedRectangleBorder(
+              //             side: BorderSide(),
+              //             borderRadius: BorderRadiusGeometry.circular(10),
+              //           ),
+              //           foregroundColor: Colors.black,
+              //           backgroundColor: Color.fromRGBO(190, 190, 190, 1),
+              //         ),
+              //   onPressed: () async {
+              //     await checkedbox.changeValue(symbol, method, hwTt, context);
+              //   },
+              //   child: Row(
+              //     spacing: 3,
+              //     children: [
+              //       Text("HW", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              //       Icon(
+              //         Icons.close,
+              //         color: checkedbox.getValue(symbol, method, hwTt) ? Colors.red : Color.fromRGBO(102, 7, 0, 1),
+              //         size: 20.0,
+              //       ),
+              //       Icon(
+              //         Icons.arrow_upward_rounded,
+              //         color: checkedbox.getValue(symbol, method, hw)
+              //             ? Color.fromRGBO(6, 255, 14, 1)
+              //             : Color.fromRGBO(0, 57, 2, 1),
+              //         size: 20.0,
+              //       ),
+              //       Icon(
+              //         Icons.arrow_downward_rounded,
+              //         color: checkedbox.getValue(symbol, method, hw) ? Colors.red : Color.fromRGBO(102, 7, 0, 1),
+              //         size: 20.0,
+              //       ),
+              //       Text("TT", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ],

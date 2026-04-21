@@ -25,8 +25,10 @@ class HomeScreenState extends State<HomeScreen> {
   List<String> list = [];
   List<SearchFieldListItem<String>> symbols = [];
   bool isLoading = true;
-  bool _dialogShown = false;
   bool _isDialogOpen = false;
+  String? _lastTriggeredMethod;
+  bool _frameScheduled = false;
+  late Future<void> _initFuture;
 
   late TextEditingController _tokenController;
   late FocusNode _symbolFocusNode;
@@ -41,9 +43,7 @@ class HomeScreenState extends State<HomeScreen> {
     _symbolFocusNode = FocusNode();
     _tokenController = TextEditingController();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeApp(context);
-    });
+    _initFuture = _initializeApp(context);
   }
 
   Future<void> _initializeApp(BuildContext context) async {
@@ -88,7 +88,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _initializeApp(context),
+      future: _initFuture,
       builder: (context, snapshot) {
         final myTokenProvider = Provider.of<MytokenProvider>(context);
 
@@ -233,31 +233,42 @@ class HomeScreenState extends State<HomeScreen> {
           body: Consumer2<ValueProvider, CheckedBoxProvider>(
             builder: (context, auto, check, child) {
               final symbol = auto.manualSelectedValue;
+              List<String> triggeredMethods = [];
 
               if (symbol != null) {
-                final condition =
-                    check.isM1LongAllChecked(symbol) ||
-                    check.isM1ShortAllChecked(symbol) ||
-                    check.isM2LongAllChecked(symbol) ||
-                    check.isM2ShortAllChecked(symbol) ||
-                    check.isM3LongAllChecked(symbol) ||
-                    check.isM3ShortAllChecked(symbol) ||
-                    check.isM4LongAllChecked(symbol) ||
-                    check.isM4ShortAllChecked(symbol);
+                if (check.isM1LongAllChecked(symbol)) triggeredMethods.add("M1_LONG");
+                if (check.isM1ShortAllChecked(symbol)) triggeredMethods.add("M1_SHORT");
+                if (check.isM2LongAllChecked(symbol)) triggeredMethods.add("M2_LONG");
+                if (check.isM2ShortAllChecked(symbol)) triggeredMethods.add("M2_SHORT");
+                if (check.isM3LongAllChecked(symbol)) triggeredMethods.add("M3_LONG");
+                if (check.isM3ShortAllChecked(symbol)) triggeredMethods.add("M3_SHORT");
+                if (check.isM4LongAllChecked(symbol)) triggeredMethods.add("M4_LONG");
+                if (check.isM4ShortAllChecked(symbol)) triggeredMethods.add("M4_SHORT");
+                if (!_frameScheduled) {
+                  _frameScheduled = true;
 
-                if (condition && !_dialogShown && !_isDialogOpen) {
-                  _dialogShown = true;
-                  _isDialogOpen = true;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _frameScheduled = false;
 
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    await showDialog(context: context, builder: (_) => methodDialog(context));
+                    if (!mounted) return;
 
-                    _isDialogOpen = false;
+                    final sorted = [...triggeredMethods]..sort();
+                    final key = sorted.join(",");
+
+                    if (triggeredMethods.isNotEmpty && key != _lastTriggeredMethod && !_isDialogOpen) {
+                      _isDialogOpen = true;
+
+                      showDialog(context: context, builder: (_) => methodDialog(context)).then((_) {
+                        if (mounted) {
+                          setState(() {
+                            _isDialogOpen = false;
+                          });
+                        }
+                      });
+                    }
+
+                    _lastTriggeredMethod = key;
                   });
-                }
-
-                if (!condition) {
-                  _dialogShown = false;
                 }
               }
               return auto.isAutomaticSectionEnabled

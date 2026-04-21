@@ -195,6 +195,7 @@ class CheckedBoxProvider extends ChangeNotifier {
   bool isM2LongAllChecked(String symbol) {
     final v = getValues("MM", symbol);
     return (isLongAllChecked(symbol) &&
+        (v['ShortMfChecked'] ?? false) &&
         (v['LongSignalChecked'] ?? false) &&
         ((v['LongReversalChecked'] ?? false) || (v['LongReversalPlusChecked'] ?? false)));
   }
@@ -202,6 +203,7 @@ class CheckedBoxProvider extends ChangeNotifier {
   bool isM2ShortAllChecked(String symbol) {
     final v = getValues("MM", symbol);
     return (isShortAllChecked(symbol) &&
+        (v['LongMfChecked'] ?? false) &&
         (v['ShortSignalChecked'] ?? false) &&
         ((v['ShortReversalChecked'] ?? false) || (v['ShortReversalPlusChecked'] ?? false)));
   }
