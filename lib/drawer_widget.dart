@@ -265,6 +265,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ),
           ],
         ),
+        // ListTile(
+        //   title: Text('Get Log File'),
+        //   onTap: () async {
+        //     await downloadLogFile();
+        //   },
+        // ),
       ],
     );
   }

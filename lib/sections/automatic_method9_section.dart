@@ -16,7 +16,7 @@ class _AutomaticMethod9SectionState extends State<AutomaticMethod9Section> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 5, bottom: 5),
+      padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 5, bottom: 5),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -57,61 +57,54 @@ class _AutomaticMethod9SectionState extends State<AutomaticMethod9Section> {
                                     child: Column(
                                       children: [
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            SizedBox(
-                                              width: 110,
-                                              height: 35,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 3.0),
-                                                child: Text(
-                                                  items[index].symbol,
-                                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Text(
+                                                items[index].symbol,
+                                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                items[index].volume.toStringAsFixed(2),
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(37, 99, 235, 1),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: 65,
-                                              height: 35,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 3.0),
-                                                child: Text(
-                                                  items[index].volume.toStringAsFixed(2),
-                                                  style: TextStyle(
-                                                    color: Color.fromRGBO(37, 99, 235, 1),
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                            Expanded(
+                                              flex: 2,
+                                              child: TextButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  maximumSize: Size(75, 40),
+                                                  backgroundColor: Color.fromRGBO(229, 231, 235, 1),
+                                                  foregroundColor: Colors.black,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadiusGeometry.circular(5),
+                                                    side: BorderSide(color: Colors.black, width: 1),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              style: ElevatedButton.styleFrom(
-                                                maximumSize: Size(75, 40),
-                                                backgroundColor: Color.fromRGBO(229, 231, 235, 1),
-                                                foregroundColor: Colors.black,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadiusGeometry.circular(5),
-                                                  side: BorderSide(color: Colors.black, width: 1),
-                                                ),
-                                              ),
-                                              onPressed: () async {
-                                                final data = CurrentAutomationModel(
-                                                  symbol: items[index].symbol,
-                                                  volume: items[index].volume,
-                                                  isEnabled: true,
-                                                  action: ActionType.close,
-                                                  method: "AM9",
-                                                );
-                                                await automaticTrading(context, data);
-                                              },
-                                              child: Text(
-                                                'Close',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
+                                                onPressed: () async {
+                                                  final data = CurrentAutomationModel(
+                                                    symbol: items[index].symbol,
+                                                    volume: items[index].volume,
+                                                    isEnabled: true,
+                                                    action: ActionType.close,
+                                                    method: "AM9",
+                                                  );
+                                                  await automaticTrading(context, data);
+                                                },
+                                                child: Text(
+                                                  'Close',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                             ),

@@ -83,10 +83,10 @@ class ValueProvider extends ChangeNotifier {
 
   Future<void> _loadInitial(BuildContext context) async {
     final response = await getLocalValues();
-    manualVolume = response.manualVolume;
-    manualVolumeController.text = manualVolume.toString();
-    amVolume = response.automaticVolume;
-    amVolumeController.text = amVolume.toStringAsFixed(2);
+    manualVolume = num.tryParse(response.manualVolume) ?? 0.01;
+    manualVolumeController.text = response.manualVolume;
+    amVolume = num.tryParse(response.automaticVolume) ?? 0.01;
+    amVolumeController.text = response.automaticVolume;
     final lastSymbol = response.lastActiveSymbol;
     final amLastSymbol = response.amLastSymbol;
     var liveAmData = response.liveAutomaticTrade;
@@ -146,8 +146,8 @@ class ValueProvider extends ChangeNotifier {
       userId: "1",
       lastActiveSymbol: manualSelectedValue ?? "",
       amLastSymbol: amSelectedValue ?? "",
-      automaticVolume: amVolume,
-      manualVolume: manualVolume,
+      automaticVolume: amVolume.toStringAsFixed(2),
+      manualVolume: manualVolume.toStringAsFixed(2),
       liveAutomaticTrade: [
         ...liveAutomaticTradeM1.values,
         ...liveAutomaticTradeM2.values,
@@ -161,8 +161,6 @@ class ValueProvider extends ChangeNotifier {
   }
 
   void setAMVolume(String method, double newVolume) async {
-    print(method);
-    print(newVolume);
     amVolume = newVolume;
     amVolumeController.text = newVolume.toStringAsFixed(2);
 
@@ -170,8 +168,8 @@ class ValueProvider extends ChangeNotifier {
       userId: "1",
       lastActiveSymbol: manualSelectedValue ?? "",
       amLastSymbol: amSelectedValue ?? "",
-      automaticVolume: amVolume,
-      manualVolume: manualVolume,
+      automaticVolume: amVolume.toStringAsFixed(2),
+      manualVolume: manualVolume.toStringAsFixed(2),
       liveAutomaticTrade: [
         ...liveAutomaticTradeM1.values,
         ...liveAutomaticTradeM2.values,
@@ -214,8 +212,8 @@ class ValueProvider extends ChangeNotifier {
       userId: "1",
       lastActiveSymbol: manualSelectedValue ?? "",
       amLastSymbol: amSelectedValue ?? "",
-      automaticVolume: amVolume,
-      manualVolume: manualVolume,
+      automaticVolume: amVolume.toStringAsFixed(2),
+      manualVolume: manualVolume.toStringAsFixed(2),
       liveAutomaticTrade: [
         ...liveAutomaticTradeM1.values,
         ...liveAutomaticTradeM2.values,
@@ -236,8 +234,8 @@ class ValueProvider extends ChangeNotifier {
       userId: "1",
       lastActiveSymbol: manualSelectedValue ?? "",
       amLastSymbol: amSelectedValue ?? "",
-      automaticVolume: amVolume,
-      manualVolume: manualVolume,
+      automaticVolume: amVolume.toStringAsFixed(2),
+      manualVolume: manualVolume.toStringAsFixed(2),
       liveAutomaticTrade: [
         ...liveAutomaticTradeM1.values,
         ...liveAutomaticTradeM2.values,
