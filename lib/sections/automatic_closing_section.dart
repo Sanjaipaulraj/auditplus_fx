@@ -334,6 +334,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
   }
 
   Widget _buildRealUI(String symbol, String method, CheckedBoxProvider checkedbox) {
+    final isAm3 = method == "AM3";
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -570,9 +571,11 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
                         foregroundColor: Colors.black,
                         backgroundColor: Color.fromRGBO(190, 190, 190, 1),
                       ),
-                onPressed: () async {
-                  await checkedbox.changeValue(symbol, method, mf, context);
-                },
+                onPressed: isAm3
+                    ? () {}
+                    : () async {
+                        await checkedbox.changeValue(symbol, method, mf, context);
+                      },
                 child: Row(
                   spacing: 3,
                   children: [
