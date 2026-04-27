@@ -198,6 +198,39 @@ class _AutomationScreenState extends State<AutomationScreen> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () => {
+                            am.changeMethodScreen('AM', Method.method5),
+                            _pageController.animateToPage(
+                              3,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            ),
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: am.autoScreenView == Method.method5
+                                  ? const Color.fromRGBO(33, 52, 72, 1)
+                                  // : Colors.transparent,
+                                  : Color.fromRGBO(209, 238, 250, 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Method5",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: am.autoScreenView == Method.method5 ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => {
                             am.changeMethodScreen('AM', Method.method9),
                             _pageController.animateToPage(
                               4,
@@ -307,6 +340,8 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM3";
                                   } else if (drop.autoScreenView == Method.method4) {
                                     method = "AM4";
+                                  } else if (drop.autoScreenView == Method.method5) {
+                                    method = "AM5";
                                   } else if (drop.autoScreenView == Method.method9) {
                                     method = "AM9";
                                   }
@@ -348,6 +383,8 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM3";
                                   } else if (drop.autoScreenView == Method.method4) {
                                     method = "AM4";
+                                  } else if (drop.autoScreenView == Method.method5) {
+                                    method = "AM5";
                                   } else if (drop.autoScreenView == Method.method9) {
                                     method = "AM9";
                                   }
@@ -368,6 +405,8 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM3";
                                   } else if (drop.autoScreenView == Method.method4) {
                                     method = "AM4";
+                                  } else if (drop.autoScreenView == Method.method5) {
+                                    method = "AM5";
                                   } else if (drop.autoScreenView == Method.method9) {
                                     method = "AM9";
                                   }
@@ -431,6 +470,8 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                   method = "AM3";
                                 } else if (autoLive.autoScreenView == Method.method4) {
                                   method = "AM4";
+                                } else if (autoLive.autoScreenView == Method.method5) {
+                                  method = "AM5";
                                 } else if (autoLive.autoScreenView == Method.method9) {
                                   method = "AM9";
                                 }
@@ -476,6 +517,8 @@ class _AutomationScreenState extends State<AutomationScreen> {
                       } else if (index == 3) {
                         method = Method.method4;
                       } else if (index == 4) {
+                        method = Method.method5;
+                      } else if (index == 5) {
                         method = Method.method9;
                       }
                       screen.changeMethodScreen('AM', method);
@@ -486,6 +529,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                       AutomaticMethod2Section(),
                       AutomaticMethod3Section(),
                       AutomaticMethod4Section(),
+                      AutomaticMethod5Section(),
                       AutomaticMethod9Section(),
                     ],
                   );

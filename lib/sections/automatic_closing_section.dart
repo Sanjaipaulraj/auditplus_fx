@@ -21,6 +21,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2ReversalPlusPlusChecked',
     'AM3': 'AM3ReversalPlusPlusChecked',
     'AM4': 'AM4ReversalPlusPlusChecked',
+    'AM5': 'AM5ReversalPlusPlusChecked',
   }[widget.method]!;
 
   String get reversalPlus => {
@@ -32,6 +33,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2ReversalPlusChecked',
     'AM3': 'AM3ReversalPlusChecked',
     'AM4': 'AM4ReversalPlusChecked',
+    'AM5': 'AM5ReversalPlusChecked',
   }[widget.method]!;
 
   String get reversal => {
@@ -43,6 +45,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2ReversalChecked',
     'AM3': 'AM3ReversalChecked',
     'AM4': 'AM4ReversalChecked',
+    'AM5': 'AM5ReversalChecked',
   }[widget.method]!;
 
   String get signal => {
@@ -54,6 +57,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2SignalExitChecked',
     'AM3': 'AM3SignalExitChecked',
     'AM4': 'AM4SignalExitChecked',
+    'AM5': 'AM5SignalExitChecked',
   }[widget.method]!;
 
   String get tc => {
@@ -65,6 +69,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2TcChangeChecked',
     'AM3': 'AM3TcChangeChecked',
     'AM4': 'AM4TcChangeChecked',
+    'AM5': 'AM5TcChangeChecked',
   }[widget.method]!;
 
   String get hw => {
@@ -76,6 +81,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2HwChecked',
     'AM3': 'AM3HwChecked',
     'AM4': 'AM4HwChecked',
+    'AM5': 'AM5HwChecked',
   }[widget.method]!;
 
   String get hwTh => {
@@ -87,6 +93,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2HWTHChecked',
     'AM3': 'AM3HWTHChecked',
     'AM4': 'AM4HWTHChecked',
+    'AM5': 'AM5HWTHChecked',
   }[widget.method]!;
 
   String get mf => {
@@ -98,6 +105,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2MfChecked',
     'AM3': 'AM3MfChecked',
     'AM4': 'AM4MfChecked',
+    'AM5': 'AM5MfChecked',
   }[widget.method]!;
 
   String get tcTt => {
@@ -109,6 +117,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
     'AM2': 'AM2TCCROSSEDTTChecked',
     'AM3': 'AM3TCCROSSEDTTChecked',
     'AM4': 'AM4TCCROSSEDTTChecked',
+    'AM5': 'AM5TCCROSSEDTTChecked',
   }[widget.method]!;
 
   @override
@@ -140,6 +149,8 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
           method = "AM3";
         } else if (widget.method == "AM4") {
           method = "AM4";
+        } else if (widget.method == "AM5") {
+          method = "AM5";
         }
         return Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -334,7 +345,6 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
   }
 
   Widget _buildRealUI(String symbol, String method, CheckedBoxProvider checkedbox) {
-    final isAm3 = method == "AM3";
     final isAm4 = method == "AM4";
     final isAm5 = method == "AM5";
     return Container(
@@ -527,7 +537,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
                         foregroundColor: Colors.black,
                         backgroundColor: Color.fromRGBO(190, 190, 190, 1),
                       ),
-                onPressed: isAm3 || isAm4
+                onPressed: isAm4 || isAm5
                     ? () {}
                     : () async {
                         await checkedbox.changeValue(symbol, method, hw, context);
@@ -575,7 +585,7 @@ class _AutomaticClosingSectionState extends State<AutomaticClosingSection> {
                         foregroundColor: Colors.black,
                         backgroundColor: Color.fromRGBO(190, 190, 190, 1),
                       ),
-                onPressed: isAm3 || isAm4
+                onPressed: isAm4 || isAm5
                     ? () {}
                     : () async {
                         await checkedbox.changeValue(symbol, method, mf, context);

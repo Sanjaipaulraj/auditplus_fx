@@ -20,6 +20,7 @@ class CheckedBoxProvider extends ChangeNotifier {
   Map<String, Map<String, bool>> am2ValuesPerSymbol = {};
   Map<String, Map<String, bool>> am3ValuesPerSymbol = {};
   Map<String, Map<String, bool>> am4ValuesPerSymbol = {};
+  Map<String, Map<String, bool>> am5ValuesPerSymbol = {};
 
   static Map<String, bool> _mmEmptyValues() => {
     'LongTcChecked': false,
@@ -148,6 +149,19 @@ class CheckedBoxProvider extends ChangeNotifier {
     'AM4TCCROSSEDTTChecked': false,
   };
 
+  static Map<String, bool> _am5EmptyValues() => {
+    'AM5ReversalPlusPlusChecked': false,
+    'AM5ReversalPlusChecked': false,
+    'AM5ReversalChecked': false,
+    'AM5SignalExitChecked': false,
+    // 'AM5TcChangeChecked': false,
+    'AM5TcChangeChecked': true,
+    'AM5HwChecked': false,
+    'AM5MfChecked': false,
+    'AM5HWTHChecked': false,
+    'AM5TCCROSSEDTTChecked': false,
+  };
+
   //Generic getter
   Map<String, bool> getValues(String method, String symbol) {
     if (method == "MM") {
@@ -168,6 +182,8 @@ class CheckedBoxProvider extends ChangeNotifier {
       return am3ValuesPerSymbol[symbol] ?? {};
     } else if (method == "AM4") {
       return am4ValuesPerSymbol[symbol] ?? {};
+    } else if (method == "AM5") {
+      return am5ValuesPerSymbol[symbol] ?? {};
     }
     throw Exception("Invalid method");
   }
@@ -178,6 +194,12 @@ class CheckedBoxProvider extends ChangeNotifier {
       return true;
     }
     if (method == "AM4" && field == "AM4HwChecked") {
+      return true;
+    }
+    if (method == "AM5" && field == "AM5MfChecked") {
+      return true;
+    }
+    if (method == "AM5" && field == "AM5HwChecked") {
       return true;
     }
     return map[field] ?? false;
@@ -260,6 +282,7 @@ class CheckedBoxProvider extends ChangeNotifier {
       final am2 = await getSymbolSetting(userId: "1", symbol: symbol, section: 'AM2');
       final am3 = await getSymbolSetting(userId: "1", symbol: symbol, section: 'AM3');
       final am4 = await getSymbolSetting(userId: "1", symbol: symbol, section: 'AM4');
+      final am5 = await getSymbolSetting(userId: "1", symbol: symbol, section: 'AM5');
 
       mmValuesPerSymbol[symbol] = {..._mmEmptyValues(), ...mm};
       mm1ValuesPerSymbol[symbol] = {..._mm1EmptyValues(), ...mm1};
@@ -270,12 +293,14 @@ class CheckedBoxProvider extends ChangeNotifier {
       am2ValuesPerSymbol[symbol] = {..._am2EmptyValues(), ...am2};
       am3ValuesPerSymbol[symbol] = {..._am3EmptyValues(), ...am3};
       am4ValuesPerSymbol[symbol] = {..._am4EmptyValues(), ...am4};
+      am5ValuesPerSymbol[symbol] = {..._am5EmptyValues(), ...am5};
     } catch (e) {
       mmValuesPerSymbol.clear();
       am1ValuesPerSymbol.clear();
       am2ValuesPerSymbol.clear();
       am3ValuesPerSymbol.clear();
       am4ValuesPerSymbol.clear();
+      am5ValuesPerSymbol.clear();
     }
 
     _isLoading = false;
@@ -317,6 +342,9 @@ class CheckedBoxProvider extends ChangeNotifier {
     } else if (method == 'AM4') {
       am4ValuesPerSymbol[symbol] ??= _am4EmptyValues();
       am4ValuesPerSymbol[symbol]![field] = !(am4ValuesPerSymbol[symbol]![field] ?? false);
+    } else if (method == 'AM5') {
+      am5ValuesPerSymbol[symbol] ??= _am5EmptyValues();
+      am5ValuesPerSymbol[symbol]![field] = !(am5ValuesPerSymbol[symbol]![field] ?? false);
     }
 
     notifyListeners();
@@ -350,6 +378,8 @@ class CheckedBoxProvider extends ChangeNotifier {
         return am3ValuesPerSymbol[symbol]!;
       case 'AM4':
         return am4ValuesPerSymbol[symbol]!;
+      case 'AM5':
+        return am5ValuesPerSymbol[symbol]!;
       default:
         return {};
     }

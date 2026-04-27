@@ -6,26 +6,26 @@ import '../api_methods/api_methods.dart';
 import '../models/models.dart';
 import 'sections.dart';
 
-class AutomaticMethod1Section extends StatefulWidget {
-  const AutomaticMethod1Section({super.key});
+class AutomaticMethod5Section extends StatefulWidget {
+  const AutomaticMethod5Section({super.key});
 
   @override
-  State<AutomaticMethod1Section> createState() => _AutomaticMethod1SectionState();
+  State<AutomaticMethod5Section> createState() => _AutomaticMethod5SectionState();
 }
 
-class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
+class _AutomaticMethod5SectionState extends State<AutomaticMethod5Section> {
   Set<String> expandedSymbols = {};
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 5, bottom: 5),
+      padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 5, bottom: 5),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Consumer<ValueProvider>(
             builder: (context, autoLive, child) {
-              if (autoLive.liveAutomaticTradeM1.isEmpty) {
+              if (autoLive.liveAutomaticTradeM5.isEmpty) {
                 return Text("No items found");
               } else {
                 return SingleChildScrollView(
@@ -38,13 +38,13 @@ class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
                     width: MediaQuery.of(context).size.height * 0.7,
                     child: Consumer<ValueProvider>(
                       builder: (context, autoLive, child) {
-                        final items = autoLive.liveAutomaticTradeM1.values.toList();
+                        final items = autoLive.liveAutomaticTradeM5.values.toList();
                         return ListView.builder(
                           itemCount: items.length,
                           itemBuilder: (context, index) {
                             final symbol = items[index].symbol;
 
-                            if (!context.read<CheckedBoxProvider>().am1ValuesPerSymbol.containsKey(symbol)) {
+                            if (!context.read<CheckedBoxProvider>().am5ValuesPerSymbol.containsKey(symbol)) {
                               Future.microtask(() {
                                 // ignore: use_build_context_synchronously
                                 context.read<CheckedBoxProvider>().loadAll(symbol);
@@ -52,7 +52,7 @@ class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
                             }
                             return Padding(
                               key: ValueKey(items[index].symbol),
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(4.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,61 +67,54 @@ class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
                                     child: Column(
                                       children: [
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            SizedBox(
-                                              width: 110,
-                                              height: 35,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 3.0),
-                                                child: Text(
-                                                  items[index].symbol,
-                                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Text(
+                                                items[index].symbol,
+                                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                items[index].volume.toStringAsFixed(2),
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(37, 99, 235, 1),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: 65,
-                                              height: 35,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 3.0),
-                                                child: Text(
-                                                  items[index].volume.toStringAsFixed(2),
-                                                  style: TextStyle(
-                                                    color: Color.fromRGBO(37, 99, 235, 1),
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                            Expanded(
+                                              flex: 2,
+                                              child: TextButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  maximumSize: Size(75, 40),
+                                                  backgroundColor: Color.fromRGBO(229, 231, 235, 1),
+                                                  foregroundColor: Colors.black,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadiusGeometry.circular(5),
+                                                    side: BorderSide(color: Colors.black, width: 1),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              style: ElevatedButton.styleFrom(
-                                                maximumSize: Size(75, 40),
-                                                backgroundColor: Color.fromRGBO(229, 231, 235, 1),
-                                                foregroundColor: Colors.black,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadiusGeometry.circular(5),
-                                                  side: BorderSide(color: Colors.black, width: 1),
-                                                ),
-                                              ),
-                                              onPressed: () async {
-                                                final data = CurrentAutomationModel(
-                                                  symbol: items[index].symbol,
-                                                  volume: items[index].volume,
-                                                  isEnabled: true,
-                                                  action: ActionType.close,
-                                                  method: "AM1",
-                                                );
-                                                await automaticTrading(context, data);
-                                              },
-                                              child: Text(
-                                                'Close',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
+                                                onPressed: () async {
+                                                  final data = CurrentAutomationModel(
+                                                    symbol: items[index].symbol,
+                                                    volume: items[index].volume,
+                                                    isEnabled: true,
+                                                    action: ActionType.close,
+                                                    method: "AM5",
+                                                  );
+                                                  await automaticTrading(context, data);
+                                                },
+                                                child: Text(
+                                                  'Close',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -140,7 +133,7 @@ class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
                                                   volume: items[index].volume,
                                                   isEnabled: false,
                                                   action: ActionType.disable,
-                                                  method: "AM1",
+                                                  method: "AM5",
                                                 );
                                                 await automaticTrading(context, data);
                                                 autoLive.removeLiveTrade(data.symbol, data.method);
@@ -172,7 +165,7 @@ class _AutomaticMethod1SectionState extends State<AutomaticMethod1Section> {
                                           ],
                                         ),
                                         if (expandedSymbols.contains(items[index].symbol))
-                                          AutomaticClosingSection(method: 'AM1', amSymbol: items[index].symbol),
+                                          AutomaticClosingSection(method: 'AM5', amSymbol: items[index].symbol),
                                       ],
                                     ),
                                   ),
