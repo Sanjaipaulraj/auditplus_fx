@@ -82,7 +82,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Method1",
+                                "M1",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: am.autoScreenView == Method.method1
@@ -118,7 +118,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Method2",
+                                "M2",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: am.autoScreenView == Method.method2 ? Colors.white : Colors.black,
@@ -151,7 +151,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Method3",
+                                "M3",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: am.autoScreenView == Method.method3 ? Colors.white : Colors.black,
@@ -184,7 +184,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Method4",
+                                "M4",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: am.autoScreenView == Method.method4 ? Colors.white : Colors.black,
@@ -200,7 +200,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                           onTap: () => {
                             am.changeMethodScreen('AM', Method.method5),
                             _pageController.animateToPage(
-                              3,
+                              4,
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             ),
@@ -217,7 +217,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Method5",
+                                "M5",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: am.autoScreenView == Method.method5 ? Colors.white : Colors.black,
@@ -233,7 +233,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                           onTap: () => {
                             am.changeMethodScreen('AM', Method.method9),
                             _pageController.animateToPage(
-                              4,
+                              5,
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             ),
@@ -250,7 +250,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Method9",
+                                "M9",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: am.autoScreenView == Method.method9 ? Colors.white : Colors.black,
