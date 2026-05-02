@@ -49,7 +49,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
     setState(() {
-      menuSelectedItem = symbols.first; // "ALL"
+      menuSelectedItem = symbols.first;
       menuSelectedValue = "ALL";
       fromDateController.text = formattedDate;
       toDateController.text = formattedDate;
@@ -192,7 +192,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     onTap: () {
                       SearchFieldListItem<String> val = SearchFieldListItem<String>(m.symbol, value: m.symbol);
-                      Provider.of<ValueProvider>(context, listen: false).setSelectedItem(val, context);
+                      Provider.of<ValueProvider>(context, listen: false).setSelectedItem(val, "MM", context);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${m.symbol} clicked')));
                       Navigator.pop(context);
                     },
@@ -226,8 +226,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         }
 
                         setState(() {
-                          menuSelectedItem = allItem; // ✅ SAME INSTANCE
-                          menuSelectedValue = "ALL";
+                          menuSelectedItem = allItem;
                         });
 
                         final query = searchText.toUpperCase();
@@ -241,7 +240,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         _menuSymbolFocusNode.unfocus();
 
                         setState(() {
-                          menuSelectedItem = item; // ✅ already in symbols
+                          menuSelectedItem = item;
                           menuSelectedValue = item.searchKey;
                         });
                       },

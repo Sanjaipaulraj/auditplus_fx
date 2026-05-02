@@ -313,7 +313,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                   if (searchText.isEmpty) {
                                     return List<SearchFieldListItem<String>>.from(widget.symbols);
                                   }
-                                  context.read<ValueProvider>().amClearSelectedValue();
+                                  context.read<ValueProvider>().clearSelectedValue("AM");
 
                                   final query = searchText.toUpperCase();
                                   return widget.symbols.where((s) {
@@ -323,13 +323,13 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                   }).toList();
                                 },
                                 onSuggestionTap: (SearchFieldListItem<String> item) {
-                                  context.read<ValueProvider>().setAMSelectedItem(item, context);
+                                  context.read<ValueProvider>().setSelectedItem(item, "AM", context);
                                 },
                                 onSubmit: (item) async {
                                   Provider.of<ValueProvider>(
                                     context,
                                     listen: false,
-                                  ).setAMSelectedItem(SearchFieldListItem(item), context);
+                                  ).setSelectedItem(SearchFieldListItem(item), "AM", context);
                                   // String method = drop.autoScreenView == Method.method1 ? "AM1" : "AM2";
                                   String method = "";
                                   if (drop.autoScreenView == Method.method1) {
@@ -389,7 +389,7 @@ class _AutomationScreenState extends State<AutomationScreen> {
                                     method = "AM9";
                                   }
                                   if (parsedValue != null) {
-                                    drop.setAMVolume(method, parsedValue);
+                                    drop.setVolume(method, parsedValue, "AM");
                                     // drop.setAMVolume('AM', parsedValue);
                                   }
                                 },

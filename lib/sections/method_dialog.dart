@@ -142,7 +142,7 @@ Widget methodDialog(BuildContext context) {
                               onChanged: (newValue) {
                                 final parsedValue = double.tryParse(newValue);
                                 if (parsedValue != null) {
-                                  vol.setManualVolume(parsedValue);
+                                  vol.setVolume(null, parsedValue, "MM");
                                 }
                               },
                               textAlign: TextAlign.center,
@@ -308,7 +308,7 @@ Widget methodDialog(BuildContext context) {
                               onChanged: (newValue) {
                                 final parsedValue = double.tryParse(newValue);
                                 if (parsedValue != null) {
-                                  vol.setManualVolume(parsedValue);
+                                  vol.setVolume(null, parsedValue, "MM");
                                 }
                               },
                               textAlign: TextAlign.center,
@@ -473,7 +473,7 @@ Widget methodDialog(BuildContext context) {
                               onChanged: (newValue) {
                                 final parsedValue = double.tryParse(newValue);
                                 if (parsedValue != null) {
-                                  vol.setManualVolume(parsedValue);
+                                  vol.setVolume(null, parsedValue, "MM");
                                 }
                               },
                               textAlign: TextAlign.center,
@@ -638,7 +638,7 @@ Widget methodDialog(BuildContext context) {
                               onChanged: (newValue) {
                                 final parsedValue = double.tryParse(newValue);
                                 if (parsedValue != null) {
-                                  vol.setManualVolume(parsedValue);
+                                  vol.setVolume(null, parsedValue, "MM");
                                 }
                               },
                               textAlign: TextAlign.center,

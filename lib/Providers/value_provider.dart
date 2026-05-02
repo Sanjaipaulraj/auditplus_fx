@@ -146,9 +146,14 @@ class ValueProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setManualVolume(double newVolume) async {
-    manualVolume = newVolume;
-    manualVolumeController.text = newVolume.toString();
+  void setVolume(String? method, double newVolume, String section) async {
+    if (section == "AM") {
+      amVolume = newVolume;
+      amVolumeController.text = newVolume.toStringAsFixed(2);
+    } else if (section == "MM") {
+      manualVolume = newVolume;
+      manualVolumeController.text = newVolume.toString();
+    }
 
     final data = LocalValuesModel(
       userId: "1",
@@ -169,38 +174,15 @@ class ValueProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setAMVolume(String method, double newVolume) async {
-    amVolume = newVolume;
-    amVolumeController.text = newVolume.toStringAsFixed(2);
+  void clearSelectedValue(String section) {
+    if (section == "AM") {
+      amSelectedValue = null;
+      amSelectedItem = null;
+    } else if (section == "MM") {
+      manualSelectedValue = null;
+      manualSelectedItem = null;
+    }
 
-    final data = LocalValuesModel(
-      userId: "1",
-      lastActiveSymbol: manualSelectedValue ?? "",
-      amLastSymbol: amSelectedValue ?? "",
-      automaticVolume: amVolume.toStringAsFixed(2),
-      manualVolume: manualVolume.toStringAsFixed(2),
-      liveAutomaticTrade: [
-        ...liveAutomaticTradeM1.values,
-        ...liveAutomaticTradeM2.values,
-        ...liveAutomaticTradeM3.values,
-        ...liveAutomaticTradeM4.values,
-        ...liveAutomaticTradeM5.values,
-        ...liveAutomaticTradeM9.values,
-      ],
-    );
-    await setLocalValues(data);
-    notifyListeners();
-  }
-
-  void clearSelectedValue() {
-    manualSelectedValue = null;
-    manualSelectedItem = null;
-    notifyListeners();
-  }
-
-  void amClearSelectedValue() {
-    amSelectedValue = null;
-    amSelectedItem = null;
     notifyListeners();
   }
 
@@ -214,9 +196,14 @@ class ValueProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedItem(SearchFieldListItem<String> item, BuildContext context) async {
-    manualSelectedItem = item;
-    manualSelectedValue = item.searchKey;
+  void setSelectedItem(SearchFieldListItem<String> item, String section, BuildContext context) async {
+    if (section == "AM") {
+      amSelectedItem = item;
+      amSelectedValue = item.searchKey;
+    } else if (section == "MM") {
+      manualSelectedItem = item;
+      manualSelectedValue = item.searchKey;
+    }
 
     final data = LocalValuesModel(
       userId: "1",
@@ -234,30 +221,6 @@ class ValueProvider extends ChangeNotifier {
       ],
     );
     await setLocalValues(data);
-    notifyListeners();
-  }
-
-  void setAMSelectedItem(SearchFieldListItem<String> item, BuildContext context) async {
-    amSelectedItem = item;
-    amSelectedValue = item.searchKey;
-
-    final data = LocalValuesModel(
-      userId: "1",
-      lastActiveSymbol: manualSelectedValue ?? "",
-      amLastSymbol: amSelectedValue ?? "",
-      automaticVolume: amVolume.toStringAsFixed(2),
-      manualVolume: manualVolume.toStringAsFixed(2),
-      liveAutomaticTrade: [
-        ...liveAutomaticTradeM1.values,
-        ...liveAutomaticTradeM2.values,
-        ...liveAutomaticTradeM3.values,
-        ...liveAutomaticTradeM4.values,
-        ...liveAutomaticTradeM5.values,
-        ...liveAutomaticTradeM9.values,
-      ],
-    );
-    await setLocalValues(data);
-
     notifyListeners();
   }
 

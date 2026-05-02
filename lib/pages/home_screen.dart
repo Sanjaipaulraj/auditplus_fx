@@ -323,9 +323,6 @@ class HomeScreenState extends State<HomeScreen> {
                                           if (searchText.isEmpty) {
                                             return List<SearchFieldListItem<String>>.from(symbols);
                                           }
-                                          // context.read<ValueProvider>().clearSelectedValue();
-                                          // context.read<CheckedBoxProvider>().clearState("MM");
-
                                           final query = searchText.toUpperCase();
                                           return symbols.where((s) {
                                             final key = s.searchKey.toUpperCase();
@@ -336,15 +333,14 @@ class HomeScreenState extends State<HomeScreen> {
                                         onSuggestionTap: (SearchFieldListItem<String> item) {
                                           _symbolFocusNode.unfocus();
 
-                                          context.read<ValueProvider>().setSelectedItem(item, context);
-                                          // context.read<CheckedBoxProvider>().loadForSymbol(item.value!);
+                                          context.read<ValueProvider>().setSelectedItem(item, "MM", context);
                                           context.read<CheckedBoxProvider>().loadAll(item.value!);
                                         },
                                         onSubmit: (item) {
                                           Provider.of<ValueProvider>(
                                             context,
                                             listen: false,
-                                          ).setSelectedItem(SearchFieldListItem(item), context);
+                                          ).setSelectedItem(SearchFieldListItem(item), "MM", context);
                                         },
                                       ),
                                     );
