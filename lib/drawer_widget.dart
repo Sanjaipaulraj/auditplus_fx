@@ -82,10 +82,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return grouped;
   }
 
-  // double calculateTotalProfit(List<TradeHistoryModel> list) {
-  //   return list.fold(0, (sum, item) => sum + item.profit);
-  // }
-
   Future<void> pickDate({required bool isFromDate}) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -127,36 +123,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             child: Text('Auditplus Fx', style: TextStyle(color: Colors.black, fontSize: 24)),
           ),
         ),
-
-        // ExpansionTile(
-        //   onExpansionChanged: (value) async {
-        //     if (!value) return;
-        //     final data = await fetchTradeHistory();
-        //     if (!mounted) return;
-        //     setState(() {
-        //       tradeHistory = data;
-        //     });
-        //   },
-        //   leading: const Icon(Icons.history),
-        //   title: const Text('Today History'),
-        //   children: [
-        //     for (var l in tradeHistory)
-        //       ListTile(
-        //         title: Text(l.symbol),
-        //         trailing: Text(
-        //           l.profit.toStringAsFixed(2),
-        //           style: TextStyle(
-        //             color: (l.profit > 0) ? Colors.green : Colors.red,
-        //             fontSize: 17,
-        //             fontWeight: FontWeight.w500,
-        //           ),
-        //         ),
-        //         onTap: () {
-        //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${l.symbol} clicked')));
-        //         },
-        //       ),
-        //   ],
-        // ),
         ExpansionTile(
           onExpansionChanged: (value) async {
             if (!value) return;
@@ -172,7 +138,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ...groupTradeHistory().entries.map((entry) {
               final symbol = entry.key;
               final methods = entry.value;
-              // final totalProfit = calculateTotalProfit(methods);
               num totalProfit = methods.fold(0, (sum, item) => sum + item.profit);
 
               return ExpansionTile(
@@ -194,55 +159,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             }),
           ],
         ),
-
-        // ExpansionTile(
-        //   onExpansionChanged: (value) async {
-        //     if (!value) return; // only load when expanded
-        //     final data = await fetchLiveSymbols();
-        //     if (!mounted) return;
-        //     setState(() {
-        //       liveSymbols = data;
-        //     });
-        //   },
-        //   leading: const Icon(Icons.check_circle, color: Colors.green),
-        //   title: const Text('Live Symbol'),
-        //   children: [
-        //     for (var l in liveSymbols)
-        //       ListTile(
-        //         title: Row(
-        //           spacing: 10,
-        //           children: [
-        //             SizedBox(width: 80, child: Text(l.symbol)),
-        //             Row(
-        //               spacing: 1,
-        //               children: [
-        //                 Text('-'),
-        //                 SizedBox(
-        //                   width: 40,
-        //                   child: Text(l.method, style: TextStyle(color: Color.fromRGBO(45, 95, 233, 1))),
-        //                 ),
-        //               ],
-        //             ),
-        //           ],
-        //         ),
-        //         trailing: Text(
-        //           l.profit.toStringAsFixed(2),
-        //           style: TextStyle(
-        //             color: (l.profit > 0) ? Colors.green : Colors.red,
-        //             fontSize: 17,
-        //             fontWeight: FontWeight.w500,
-        //           ),
-        //         ),
-        //         onTap: () {
-        //           SearchFieldListItem<String> val = SearchFieldListItem<String>(l.symbol, value: l.symbol);
-        //           Provider.of<ValueProvider>(context, listen: false).setSelectedItem(val, context);
-        //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${l.symbol} clicked')));
-        //           Navigator.pop(context);
-        //         },
-        //       ),
-        //   ],
-        // ),
         ExpansionTile(
+          onExpansionChanged: (value) async {
+            if (!value) return;
+            final data = await fetchLiveSymbols();
+            if (!mounted) return;
+            setState(() {
+              liveSymbols = data;
+            });
+          },
           leading: const Icon(Icons.check_circle, color: Colors.green),
           title: const Text('Live Symbol'),
           children: [
@@ -277,7 +202,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             }),
           ],
         ),
-
         ExpansionTile(
           maintainState: true,
           leading: const Icon(Icons.article),
